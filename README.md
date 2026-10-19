@@ -13,7 +13,7 @@ A Python agent for a fictional e-commerce store that can look up orders, simulat
 
 Completed for **Project 2 of the Udacity AWS AI & ML Nanodegree**. This project is separate from the earlier customer-support chatbot.
 
-> **Private educational repository.** Order/customer records are fixtures and refunds are simulations. AWS infrastructure must be configured separately. Screenshot evidence is **PENDING**; the author will add the actual captures. See [licensing](docs/UDACITY_ATTRIBUTION.md) before sharing or changing visibility.
+> **Private educational repository.** Order/customer records are fixtures and refunds are simulations. AWS infrastructure must be configured separately. All **eight screenshots have been reviewed**; the evidence index distinguishes local tests, cloud deployment, and hosted invocation. See [licensing](docs/UDACITY_ATTRIBUTION.md) before sharing or changing visibility.
 
 [Architecture](docs/ARCHITECTURE.md) · [Detailed setup](starter/README.md) · [Engineering notes](docs/TECHNICAL_DETAILS.md) · [Reflection](REFLECTION.md) · [Evidence](evidence/README.md) · [Submission checklist](docs/SUBMISSION_CHECKLIST.md)
 
@@ -29,10 +29,10 @@ The implementation keeps those boundaries visible: one Runtime entry point, MCP 
 | --- | --- | --- |
 | Order tracking | “Can you track order ORD-001?” | MCP Gateway → API Gateway → order Lambda |
 | Simulated refunds | “Please refund my Kindle order ORD-002.” | MCP Gateway → refund Lambda |
-| Grounded answers | “What are the Platinum tier benefits?” | Knowledge Base `Retrieve` → Nova response |
+| Grounded answers | “What is the electronics return policy?” | Knowledge Base `Retrieve` → Nova response |
 | Cross-session recall | “Do you remember my communication preference?” | Semantic/user-preference records via `MemoryHook` |
 | Loyalty calculation | “Apply my 4,250 Gold points to a $150 standard order.” | Code Interpreter tool with a tier-only fallback |
-| Live web retrieval | “Visit Udacity and tell me the page title.” | Strands browser tool → AgentCore Browser |
+| Live web retrieval | “Visit example.com and report its heading.” | Strands browser tool → AgentCore Browser |
 
 ## Technology stack
 
@@ -118,28 +118,34 @@ A failure returns a reduced, explicitly marked tier-only calculation. A correct 
 
 ### AgentCore Browser
 
-The registered `AgentCoreBrowser.browser` tool supports live webpage access. The reported browser scenario retrieved a live page successfully. Page content changes over time; there is no hardcoded expected title or fabricated screenshot. [Browser details](starter/README.md#agentcore-browser).
+The registered `AgentCoreBrowser.browser` tool supports live webpage access. Screenshot 06 shows browser-tool calls and returned example.com content. The manually opened Safari window is separate from the managed AgentCore Browser; no remote-session visual stream is claimed. [Browser details](starter/README.md#agentcore-browser).
 
-## Verified functional tests
+## Verified Demonstrations
 
-These results were reported by the project author. Documentation preparation used offline checks and did not rerun live agent or AWS tool operations.
+**Eight genuine captures, reviewed against the source.** The local screenshots invoke the application entry point directly from Python; they use AWS integrations while executing outside hosted Runtime. No live agent or AWS tool operation was repeated for this review.
 
-| Local scenario | Reported outcome | Screenshot evidence |
-| --- | --- | --- |
-| Order tracking | Successful | PENDING |
-| Simulated refund processing | Successful | PENDING |
-| Knowledge Base RAG | Successful | PENDING |
-| Cross-session memory | Successful after retry | PENDING |
-| Loyalty discount | Correct complete numerical breakdown | PENDING |
-| Browser retrieval | Successful live webpage retrieval | PENDING |
+| Demonstration | Verified content | Execution | Screenshot |
+| --- | --- | --- | --- |
+| Order tracking | Order MCP tool, `ORD-001`, `SHIPPED`, carrier/tracking/delivery | Local application | [01 · Order](evidence/01_order_tracking.png) |
+| Simulated refund | Refund MCP tool, `ORD-002`, `APPROVED`, $139.99 | Local application | [02 · Refund](evidence/02_refund_processing.png) |
+| Knowledge Base RAG | `search_knowledge_base`; demonstration 15-day electronics policy | Local application | [03 · RAG](evidence/03_rag.png) |
+| Cross-session memory | Two session IDs; successful retry recalls bullet-point style and electronics | Local application | [04 · Memory](evidence/04_cross_session_memory.png) |
+| Loyalty calculation | Calculator call; 4,000 redeemed, $40 + $11 discounts, $99 total, 349 points remaining | Local application | [05 · Loyalty](evidence/05_loyalty_discount.png) |
+| Browser retrieval | Browser calls; example.com heading and paragraph | Local application | [06 · Browser](evidence/06_agentcore_browser.png) |
+| Successful deployment | Direct Code Deploy command and Deployment Success output | Cloud deployment | [07 · Deployment](evidence/07_deployment_success.png) |
+| Hosted order invocation | `agentcore invoke`; cloud response for `ORD-001` | Cloud Runtime | [08 · Cloud invocation](evidence/08_cloud_invocation.png) |
 
-Runbooks and expected outcomes are in the [six local scenarios](starter/README.md#six-verified-local-scenarios). Screenshot requirements and filenames are in [evidence/README.md](evidence/README.md). Independent Code Interpreter execution evidence remains unverified.
+The lower successful retry in the memory capture is credited; its earlier failed recall is not. The loyalty capture verifies the complete numerical answer and tool selection, **not independent sandbox execution**. The browser evidence is the terminal tool calls/response; the Safari window is not represented as a managed browser session.
+
+The [evidence index](evidence/README.md) explains each capture and its limits. [Local runbooks](starter/README.md#six-verified-local-scenarios) provide repeat-test examples rather than an exact transcript of every uploaded command.
 
 ## Successful cloud deployment
 
-The author reports that AgentCore Runtime reached **READY** and successfully answered an order-tracking request for **ORD-001**. The original local deployment metadata and Linux ARM64 dependency package were inspected during preparation; private configuration and generated artifacts are intentionally excluded from this repository.
+Screenshot 07 shows deployment success, and screenshot 08 shows a successful hosted `ORD-001` invocation. The author reports Runtime reached READY; no fresh status query was made during this review. Six independently repeated cloud scenarios are not claimed.
 
-Deployment and cloud-invocation screenshots are **PENDING**. The six local results are not represented as six independently repeated cloud Runtime tests. No deployment or cloud re-invocation was performed to prepare this repository.
+The deployment capture also shows an X-Ray/CloudWatch trace-delivery configuration warning. Deployment succeeded, but complete observability is not established. Private configuration and generated archives remain excluded.
+
+The [45-check audit](docs/RUBRIC_AUDIT.md) finds no mandatory code-pattern failure in the supplied A–G criteria. Independent Code Interpreter execution and the unavailable official classroom rubric remain explicitly unverified.
 
 ## Installation and configuration
 
@@ -173,7 +179,7 @@ curl --fail-with-body -X POST http://localhost:8080/invocations \
   -d '{"prompt":"Can you track order ORD-001?","customer_id":"CUST-123","session_id":"local-order-1"}'
 ```
 
-The payload is the direct JSON object. The top-of-file JSON CLI example refers to a dormant helper; `app.run()` starts the server in the saved version. Local requests still call AWS and may write memory events. [Full local test instructions](starter/README.md#local-invocation).
+The payload is the direct JSON object. The top-of-file JSON CLI example refers to a dormant helper; `app.run()` starts the server in the saved version. Local requests still call AWS and may write memory events. The uploaded local captures instead use a direct Python call to the async `invoke()` handler; that does not start or prove an HTTP-server test. [Full local test instructions](starter/README.md#local-invocation).
 
 ## Deployment instructions
 
@@ -216,7 +222,7 @@ Read the [reflection](REFLECTION.md) and [technical notes](docs/TECHNICAL_DETAIL
 - **Data protection:** memory and logs can retain prompts or tool payloads. Define access restrictions, encryption, retention, deletion, and customer-memory isolation. Both Lambda handlers currently log incoming events.
 - **Repository hygiene:** credentials, environment files, private deployment settings, logs, and dependency archives are excluded. The unchanged source retains resource identifiers; private visibility is essential and does not make the service secure.
 - **Application limits:** business data is mocked, refund state is not durable, KB citations are not rendered, raw conversation history is not replayed, and Gateway discovery is required per invocation.
-- **Verification limits:** screenshots are pending, all-six cloud coverage is not established, sandbox execution is not independently verified, and no load test, penetration test, or production-readiness certification is claimed.
+- **Verification limits:** eight screenshots are reviewed, all-six cloud coverage is not established, sandbox execution is not independently verified, and no load test, penetration test, or production-readiness certification is claimed.
 
 See the [validation record](docs/VALIDATION.md), [full security discussion](starter/README.md#security-and-production-considerations), and [limitations](starter/README.md#known-limitations).
 
@@ -230,8 +236,9 @@ See the [validation record](docs/VALIDATION.md), [full security discussion](star
 | [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) | Service paths, event contracts, and trust boundaries |
 | [docs/TECHNICAL_DETAILS.md](docs/TECHNICAL_DETAILS.md) | Lifecycle, arithmetic, memory, packaging, and operational notes |
 | [REFLECTION.md](REFLECTION.md) | 200–400 word project reflection |
-| [docs/SUBMISSION_CHECKLIST.md](docs/SUBMISSION_CHECKLIST.md) | Source mapping and pending reviewer evidence |
-| [evidence/README.md](evidence/README.md) | Eight screenshot slots; no fabricated images |
+| [docs/RUBRIC_AUDIT.md](docs/RUBRIC_AUDIT.md) | 45 source/evidence checks with exact line references and remaining qualifications |
+| [docs/SUBMISSION_CHECKLIST.md](docs/SUBMISSION_CHECKLIST.md) | Completed checks and remaining manual submission actions |
+| [evidence/README.md](evidence/README.md) | Index of all eight genuine, reviewed screenshots |
 | [docs/upstream/UDACITY_PROJECT_INSTRUCTIONS.md](docs/upstream/UDACITY_PROJECT_INSTRUCTIONS.md) | Original upstream README preserved verbatim |
 
 ## Udacity attribution and author

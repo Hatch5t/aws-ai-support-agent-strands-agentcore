@@ -8,7 +8,7 @@ A Python support agent for a fictional e-commerce store, combining Amazon Nova 2
 
 This README documents the inspected Project 2 implementation. It is separate from the earlier Project 1 customer-support chatbot. Order and customer records are fixtures, and refund operations are simulated; no payment is transferred.
 
-> **Private educational repository.** Preserve the Udacity license and notices, keep embedded resource configuration private, and review redistribution restrictions before sharing. Screenshot evidence is PENDING manual addition. Cloning this repository does not provision AWS infrastructure.
+> **Private educational repository.** Preserve the Udacity license and notices, keep embedded resource configuration private, and review redistribution restrictions before sharing. All eight genuine screenshots are now reviewed; see the evidence index for scope and qualifications. Cloning this repository does not provision AWS infrastructure.
 
 ## Contents
 
@@ -40,11 +40,11 @@ This README documents the inspected Project 2 implementation. It is separate fro
 | Refund processing | Gateway → refund Lambda | Successful locally; simulated approval |
 | Product and policy answers | Bedrock Knowledge Base `Retrieve` tool | Successful local RAG scenario |
 | Cross-session recall | Semantic and user-preference memory retrieval | Successful locally after retry |
-| Loyalty breakdown | Code Interpreter tool with tier-only fallback | Complete, correct numerical breakdown reported locally |
+| Loyalty breakdown | Code Interpreter tool with tier-only fallback | Complete numerical breakdown visible in screenshot 05; sandbox path unverified |
 | Live web retrieval | Strands `AgentCoreBrowser` | Successful local webpage retrieval |
-| Hosted execution | AgentCore Runtime, direct code deployment | Deployment and cloud `ORD-001` invocation reported successful |
+| Hosted execution | AgentCore Runtime, direct code deployment | Deployment Success and hosted `ORD-001` response visible in screenshots 07–08 |
 
-The six functional results above were supplied by the project author. The inspected workspace contains limited saved evidence, detailed below. They were not rerun during documentation preparation. All six scenarios are **not** claimed to have been independently repeated in deployed Runtime. A correct numerical response alone does **not** independently verify a Code Interpreter session or execution.
+The six functional results are supported by the eight reviewed captures indexed in [evidence/README.md](../evidence/README.md). The captured local tests call the async entry point directly from Python. They were not rerun during documentation preparation. All six scenarios are **not** claimed to have been independently repeated in deployed Runtime. A correct numerical response alone does **not** independently verify a Code Interpreter session or execution.
 
 ## Technology stack
 
@@ -174,7 +174,7 @@ This is a Retrieve-plus-agent generation flow, not `RetrieveAndGenerate`. The up
 
 On `MessageAddedEvent`, `MemoryHook` processes a single plain-text user block, searches each namespace with `top_k=5`, labels results by strategy type, and prepends a `Customer Context:` section. It skips tool-result messages. On `AfterInvocationEvent`, it saves the original user query and last assistant text as a USER/ASSISTANT event pair. Preserving the original query avoids deliberately saving the injected context as the new query.
 
-Long-term extraction is asynchronous. The reported recall succeeded after retry, so a first query immediately after saving may miss new records. Keep the same `customer_id` and use a different payload `session_id` for a cross-session test. Reusing a session ID alone does not restore the full transcript, and the payload ID is not the separate Runtime transport session ID used by the CLI.
+Long-term extraction is asynchronous. The capture shows recall succeeded after retry, so a first query immediately after saving may miss new records. Keep the same `customer_id` and use a different payload `session_id` for a cross-session test. Reusing a session ID alone does not restore the full transcript, and the payload ID is not the separate Runtime transport session ID used by the CLI.
 
 ## Loyalty discount computation
 
@@ -204,11 +204,11 @@ For the documented standard-order scenario (4,250 points, Gold, $150):
 
 If Code Interpreter raises an error or supplies no usable result, the tool returns a **tier-only fallback** using local floating-point arithmetic, with `fallback: true` and an explanatory message. It does not redeem or award points on that path. A Gold $150 order would therefore return $15 tier discount and $135 final total in fallback mode.
 
-The author reported the complete correct numerical breakdown. Independent Code Interpreter verification still requires session/tool execution evidence; the numbers alone cannot establish which execution path actually ran.
+Screenshot 05 shows the complete correct numerical breakdown. Independent Code Interpreter verification still requires session/tool execution evidence; the numbers alone cannot establish which execution path actually ran.
 
 ## AgentCore Browser
 
-Each request creates `AgentCoreBrowser(region=REGION)` and registers its `.browser` tool. The system prompt directs the model to use it for current web information. The author reported successful live webpage retrieval locally; a reproducible scenario asks for the title at `https://www.udacity.com`.
+Each request creates `AgentCoreBrowser(region=REGION)` and registers its `.browser` tool. The system prompt directs the model to use it for current web information. Screenshot 06 shows local browser-tool calls retrieving example.com content. The separate Safari window is not treated as the managed session. The runbook below uses example.com; the archived upstream instructions retain their original Udacity.com example.
 
 The managed browser requires AWS permissions and network access. Page content can change or block automation, and untrusted webpage text must be treated as data. The repository does not implement a URL allowlist, browsing policy, or application-level prompt-injection defense.
 
@@ -238,14 +238,23 @@ aws-ai-support-agent-strands-agentcore/
 │   ├── TECHNICAL_DETAILS.md
 │   ├── UDACITY_ATTRIBUTION.md
 │   ├── SUBMISSION_CHECKLIST.md
+│   ├── RUBRIC_AUDIT.md
 │   ├── VALIDATION.md
 │   └── upstream/
 │       └── UDACITY_PROJECT_INSTRUCTIONS.md
 └── evidence/
-    └── README.md
+    ├── README.md
+    ├── 01_order_tracking.png
+    ├── 02_refund_processing.png
+    ├── 03_rag.png
+    ├── 04_cross_session_memory.png
+    ├── 05_loyalty_discount.png
+    ├── 06_agentcore_browser.png
+    ├── 07_deployment_success.png
+    └── 08_cloud_invocation.png
 ```
 
-The original `.git` directory, `.DS_Store`, virtual environment, caches, raw `refund_test.json`, private `.bedrock_agentcore.yaml`, and generated dependency archive/hash were not copied. No deployment configuration or original Git history is imported. All eight real screenshots remain PENDING; the [evidence guide](../evidence/README.md) lists filenames and requirements. The original [Udacity instructions](../docs/upstream/UDACITY_PROJECT_INSTRUCTIONS.md) supply the available project checklist; a standalone scoring rubric was not provided.
+The original `.git` directory, `.DS_Store`, virtual environment, caches, raw `refund_test.json`, private `.bedrock_agentcore.yaml`, and generated dependency archive/hash were not copied. No deployment configuration or original Git history is imported. All eight real screenshots are tracked and reviewed; the [evidence index](../evidence/README.md) links each capture and states what it supports. The original [Udacity instructions](../docs/upstream/UDACITY_PROJECT_INSTRUCTIONS.md) supply the available project checklist; a standalone scoring rubric was not provided.
 
 ## Prerequisites and local installation
 
@@ -392,9 +401,9 @@ Keep `.bedrock_agentcore.yaml` and generated deployment artifacts local. Do not 
 
 ### Six verified local scenarios
 
-The following commands reproduce the author's reported scenarios against the **local** server. They are procedures to run with authorized AWS access, not a record of fresh execution. Compare output against tool results as well as final text; HTTP success alone is insufficient because the handler can return a generic error string.
+The following are repeat-test examples against the **local** HTTP server. The uploaded captures instead call `asyncio.run(main.invoke(...))` directly using `uv run python -c`; they do not demonstrate HTTP-server invocations. No live tests were rerun for finalization. Compare output against tool results as well as final text; HTTP success alone is insufficient because the handler can return a generic error string.
 
-**1. Order tracking — reported successful.** Expect `ORD-001`, `SHIPPED`, UPS, and the fixture tracking number; delivery dates vary with execution date.
+**1. Order tracking — verified in screenshot 01.** Expect `ORD-001`, `SHIPPED`, UPS, and the fixture tracking number; delivery dates vary with execution date.
 
 ```bash
 curl --fail-with-body -X POST http://localhost:8080/invocations \
@@ -402,7 +411,7 @@ curl --fail-with-body -X POST http://localhost:8080/invocations \
   -d '{"prompt":"Can you track order ORD-001?","customer_id":"CUST-123","session_id":"t1"}'
 ```
 
-**2. Refund processing — reported successful, simulated.** Expect an approval and refund identifier; verify the mock amount rather than treating it as a real transaction.
+**2. Refund processing — verified in screenshot 02, simulated.** Expect an approval and refund identifier; verify the mock amount rather than treating it as a real transaction.
 
 ```bash
 curl --fail-with-body -X POST http://localhost:8080/invocations \
@@ -410,15 +419,15 @@ curl --fail-with-body -X POST http://localhost:8080/invocations \
   -d '{"prompt":"I want to return my Kindle Paperwhite (ORD-002). Please initiate a refund.","customer_id":"CUST-123","session_id":"t2"}'
 ```
 
-**3. Knowledge Base RAG — reported successful.** Expect the fixture Platinum benefits: free same-day shipping, 15% discount, and priority support. Inspect retrieval/tool evidence to establish grounding.
+**3. Knowledge Base RAG — verified in screenshot 03.** The capture shows the electronics return-policy query and 15-day demonstration policy; the example below matches that topic. Raw retrieved chunks are not shown separately.
 
 ```bash
 curl --fail-with-body -X POST http://localhost:8080/invocations \
   -H 'Content-Type: application/json' \
-  -d '{"prompt":"What are the benefits of the Platinum loyalty tier?","customer_id":"CUST-123","session_id":"t3"}'
+  -d '{"prompt":"What is the demonstration return policy for electronics, including the return window and conditions?","customer_id":"CUST-123","session_id":"t3"}'
 ```
 
-**4. Cross-session memory — reported successful after retry.** Save a synthetic name/preference, allow at least 30 seconds for extraction, then recall with the same actor and a different session. Extraction may take longer; retry if records are not ready. Distinct synthetic content helps distinguish recall from names already in fixtures.
+**4. Cross-session memory — verified after retry in screenshot 04.** The actual capture uses `CUST-123`, `memory-test-A`, and `memory-test-B` to recall short bullet-point answers and electronics. Its earlier failed recall is not credited as success. Save a synthetic name/preference, allow at least 30 seconds for extraction, then recall with the same actor and a different session. Extraction may take longer; retry if records are not ready. Distinct synthetic content helps distinguish recall from names already in fixtures.
 
 ```bash
 curl --fail-with-body -X POST http://localhost:8080/invocations \
@@ -433,7 +442,7 @@ curl --fail-with-body -X POST http://localhost:8080/invocations \
 
 The synthetic identity above is a proposed repeat-test input, not a claim about the exact original test transcript. Confirm both name and preference came from stored records.
 
-**5. Loyalty calculation — complete numerical breakdown reported correct.** Expect the seven values in the loyalty table above. Preserve tool/session evidence separately to verify remote Code Interpreter execution.
+**5. Loyalty calculation — complete numerical breakdown verified in screenshot 05.** Expect the seven values in the loyalty table above. Preserve tool/session evidence separately to verify remote Code Interpreter execution.
 
 ```bash
 curl --fail-with-body -X POST http://localhost:8080/invocations \
@@ -441,26 +450,26 @@ curl --fail-with-body -X POST http://localhost:8080/invocations \
   -d '{"prompt":"I am a Gold member with 4250 points. Calculate my discount on a $150 standard order. Show points redeemed, points discount, tier discount, final total, total savings, points earned, and remaining points.","customer_id":"CUST-123","session_id":"t5"}'
 ```
 
-**6. Browser — successful live webpage retrieval reported.** Ask for the current title; do not compare it to an invented fixed title.
+**6. Browser — tool calls and example.com response verified in screenshot 06.** The terminal shows the page heading and first paragraph; the separate Safari window is not a managed-session capture.
 
 ```bash
 curl --fail-with-body -X POST http://localhost:8080/invocations \
   -H 'Content-Type: application/json' \
-  -d '{"prompt":"Go to https://www.udacity.com and tell me the page title.","customer_id":"CUST-123","session_id":"t6"}'
+  -d '{"prompt":"Use the browser tool to visit https://example.com and report the page heading and first paragraph.","customer_id":"CUST-123","session_id":"t6"}'
 ```
 
 ### Cloud deployment and invocation evidence
 
 | Evidence | What is available | What it establishes / does not establish |
 | --- | --- | --- |
-| Author's verification statement | Runtime READY and deployment successful; cloud `ORD-001` invocation successful | Reported cloud result; no claim of all-six cloud coverage |
-| Original private `.bedrock_agentcore.yaml` (excluded here) | Saved Runtime ID/ARN, HTTP mode, Python 3.13 direct deployment | Local deployment metadata; not a fresh cloud readiness check or response transcript |
-| Original private dependency archive (excluded here) | Existing Linux ARM64 dependency package | Packaging artifact; not invocation evidence |
-| Original local `refund_test.json` (excluded here) | A saved `statusCode: 200` mock refund response for `ORD-002`, amount $139.99 | Supports a recorded Lambda response; lacks full input/context and does not independently establish agent/Gateway/cloud end-to-end execution |
+| [Deployment screenshot 07](../evidence/07_deployment_success.png) | Direct Code Deploy and Deployment Success output | Successful deployment report; trace-delivery warning is also visible; current READY not independently queried |
+| [Cloud screenshot 08](../evidence/08_cloud_invocation.png) | agentcore invoke and ORD-001 shipping response | One successful hosted order invocation, not all-six cloud coverage |
+| [Local screenshots 01–06](../evidence/README.md) | Tool calls and the six demonstration responses | Successful local scenarios, with memory success after retry and sandbox-execution qualification |
+| Original private configuration/archive (excluded) | Previously inspected Runtime metadata and Linux ARM64 dependencies | Configuration/packaging context; not a fresh service or execution check |
 
-All eight screenshots are PENDING manual addition. Complete terminal transcripts, memory first-attempt/retry evidence, independent Code Interpreter execution evidence, Runtime deployment-success output, and the cloud `ORD-001` response transcript are not included. The required 200–400 word [reflection](../REFLECTION.md) is now prepared; see the [submission checklist](../docs/SUBMISSION_CHECKLIST.md) for remaining review items.
+All eight screenshots are now included and reviewed. The required [285-word reflection](../REFLECTION.md) is present. Independent Code Interpreter execution remains unverified because the loyalty capture does not show a sandbox result/session trace. The [rubric audit](../docs/RUBRIC_AUDIT.md) contains exact source-line references and the official-rubric availability limitation.
 
-For submission, capture only sanitized outputs: label local versus cloud execution, record inputs and dates, include tool-level evidence where relevant, and redact account IDs, role ARNs, endpoint details, credentials, and any personal information. Safe screenshots can be added deliberately; `.gitignore` does not blanket-ignore images. Do not publish the private configuration as evidence.
+The reviewed deployment/cloud captures contain account identifiers and ARNs, which are not credentials. No active credential was visible, so the genuine images are retained unchanged in the PRIVATE repository. Redact operational details before broader distribution; do not expose the unchanged source's live Gateway endpoint publicly. No history rewrite or credential rotation was warranted solely by the identifiers reviewed.
 
 ## Technical challenges and resolutions
 
@@ -469,7 +478,7 @@ For submission, capture only sanitized outputs: label local versus cloud executi
 | Python 3.13 Linux ARM64 native dependency compatibility | Exact `lazy-object-proxy==1.12.0` pin; compatible wheel and archive binary present | Original failure log/version is missing |
 | Memory namespace response differences | Prefer `namespaceTemplates`, fall back to `namespaces` | Directly visible in `get_namespaces()` |
 | Polluting saved queries with retrieved context | Preserve `_original_user_query` before injection; save original text | Directly visible in `MemoryHook` |
-| New memory unavailable immediately | Wait for extraction and retry cross-session recall | Author reports success after retry; timing transcript missing |
+| New memory unavailable immediately | Wait for extraction and retry cross-session recall | Screenshot 04 includes failed recall and successful retry; exact extraction latency not measured |
 | Different order/refund event formats | REST proxy routing for orders; client-context tool routing for direct refunds | Lambda handlers and refund schema inspected |
 | Remote interpreter unavailable | Explicit tier-only fallback with `fallback: true` | Fallback exists; independent remote execution proof missing |
 | Running the completed server locally | Use `/invocations` HTTP requests with saved `app.run()` entry point | Source and installed SDK endpoints checked |

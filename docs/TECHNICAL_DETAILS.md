@@ -26,7 +26,7 @@ The current environment sets `BYPASS_TOOL_CONSENT=true`. This permits headless o
 
 `get_namespaces()` reads `namespaceTemplates`, with `namespaces` as a compatibility fallback. Retrieval formats actor/session placeholders and requests up to five records per strategy namespace. The hook skips tool results and preserves `_original_user_query` before injecting context, then saves the original query rather than the augmented message.
 
-The configured project strategies are semantic facts and user preferences. Extraction is asynchronous, and recall success was reported after retry. The complete raw session history is not read back by this implementation. Keep a stable actor ID, separate payload session IDs for cross-session tests, and distinguish these from a Runtime transport session ID.
+The configured project strategies are semantic facts and user preferences. Extraction is asynchronous; screenshot 04 shows an earlier failed recall and a later successful retry between `memory-test-A` and `memory-test-B`. The complete raw session history is not read back by this implementation. Keep a stable actor ID, separate payload session IDs for cross-session tests, and distinguish these from a Runtime transport session ID.
 
 ## Loyalty contract
 
@@ -58,4 +58,4 @@ Deployment, IAM apply, agent invocation, refund tools, and memory event creation
 
 ## Evidence and production boundaries
 
-The author reports six local scenarios and one cloud order invocation after Runtime reached READY. All eight screenshots are pending manual addition. Full six-scenario cloud repetition, independent sandbox execution, concurrency/load behavior, and security hardening remain unverified. Review the [submission mapping](SUBMISSION_CHECKLIST.md) before treating the repository as a complete course submission.
+All eight [screenshots](../evidence/README.md) are present, readable, and reviewed: six local scenarios, successful deployment, and one hosted order invocation. Screenshot 05 verifies the calculator call and complete numbers without independently proving sandbox execution. Screenshot 06 shows browser-tool retrieval from example.com; its Safari window is separate. Screenshot 07 includes a trace-delivery warning, so observability is not fully verified. Full six-scenario cloud repetition, sandbox execution, concurrency/load behavior, and security hardening remain unverified. The [code-level audit](RUBRIC_AUDIT.md) maps the supplied A–G criteria; the separate official classroom rubric was unavailable.

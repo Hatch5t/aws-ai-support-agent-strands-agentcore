@@ -1,37 +1,47 @@
-# Repository preparation validation
+# Final repository validation
 
-Prepared on 19 October 2026. Checks below concern the repository and documentation. No live agent endpoint, refund operation, memory event, deployment, IAM apply, or other AWS state change was run for this task.
+Reviewed on 19 October 2026. Scope is repository finalization, code inspection, uploaded screenshots, and documentation. No live agent endpoint, refund operation, memory event, deployment, IAM apply, or other AWS state change was run.
 
-## Offline review
+## Offline checks
 
 | Check | Result |
 | --- | --- |
-| Source preservation | Four Python files, manifest, lockfile, catalog, and Lambda schema copied byte-for-byte from the working project |
-| Original repository | Source/documentation files, Git HEAD, status, and original remote preserved; old Git history excluded from the new repository |
-| Python syntax | All four Python sources parsed without importing the application |
-| Dependencies | TOML/lockfile parsed; original dependency files preserved; Python 3.13 requirement and exact `lazy-object-proxy==1.12.0` pin checked; offline locked uv dry run resolved 109 packages without installation or lock changes |
-| Refund schema | JSON parsed; three declared tools match handler dispatch branches |
-| Documentation | Nine maintained Markdown files lint clean; 93 relative/section links, 18 shell blocks, and 10 JSON invocation payloads checked |
+| Source preservation | All four Python files, dependency manifest/lockfile, catalog, Lambda schema, and original license remain byte-for-byte unchanged |
+| Original starter | Original project files, Git HEAD/status, and original remote preserved |
+| Python syntax | Four sources parsed without importing the AWS application |
+| Manifest and lockfile | TOML parsed; dependencies unchanged; Python >=3.13 and lazy-object-proxy==1.12.0 checked; locked offline uv dry run resolves 109 packages without installing or editing the lockfile |
+| Loyalty arithmetic | Generated Decimal calculation checked offline against the documented seven-field result and redemption cap; this is not remote sandbox execution |
+| Rubric audit | 45 explicit checks with source-line/evidence references; supplied A–G implementation patterns PASS; official classroom rubric unavailable |
+| Screenshots | Eight PNGs decoded and visually reviewed; tracked file hashes checked against the evidence commit and remote branch |
+| Reflection | 285 body words, excluding heading; within 200–400 words |
+| Documentation | Maintained Markdown, local/section/source-line links, shell examples, JSON payloads, and screenshot references checked |
 | Mermaid | All three diagrams parsed with Mermaid 11 |
-| Reflection | 285 body words by whitespace-delimited count; within the required 200–400 range |
-| Evidence | All eight screenshot slots intentionally PENDING; no image files or broken screenshot embeds added |
-| Ignore rules | Python/uv/AWS/AgentCore/editor exclusions and retained source/examples/evidence checked |
-| License | `LICENSE.txt` and archived original instructions copied byte-for-byte; no replacement license applied |
+| Git | Fresh main branch descends from latest evidence commit; no force push or deletion of codex/initial-submission; integrity and synchronization checked |
+| Exclusions | Credentials, .env, .aws, private AgentCore settings, generated archives, environments, caches, logs, and macOS files remain ignored; source and safe examples/images remain addable |
+| License and attribution | Original LICENSE.txt and archived instructions unchanged; no MIT/Apache replacement license |
 
-The archived upstream instructions have 11 pre-existing Markdown style findings (heading emphasis, unspecified code-fence language, and spacing around lists/fences). They are preserved verbatim for attribution; maintained documentation passes the selected Markdown lint rules. Line-length and table-column alignment are treated as formatting preferences rather than errors.
+The archived upstream instructions retain 11 inherited Markdown style findings. They are preserved verbatim; maintained documentation passes the selected lint rules. Line length and table-column alignment are treated as preferences rather than errors.
+
+## Evidence conclusions
+
+The [evidence index](../evidence/README.md) links all eight real screenshots. Six show local application invocations; one shows deployment success; one shows a hosted order request. Their contents were reviewed rather than merely counting filenames.
+
+Memory success is the later retry in screenshot 04; the earlier failed recall remains visible. Screenshot 05 establishes the calculator call and correct full numerical reply, not a raw Code Interpreter execution event. Screenshot 06 establishes displayed browser calls and example.com content, not that the manually opened Safari window is a managed session.
+
+Screenshot 07 includes successful deployment output and a trace-delivery configuration warning. Complete observability and a fresh current READY query are not established. Screenshot 08 shows the cloud-hosted ORD-001 response. All-six independent cloud testing is not claimed.
 
 ## Security review
 
-Gitleaks 8.30.1, downloaded from its official release and verified against the release checksum, found no leaks in the working publication files or the complete exact staged-file content. Both scans use secret redaction. The Git staged diff and the new initial-commit history are also checked before publication. Final commit/push and PRIVATE visibility verification are reported with delivery; no credential values are printed or included in documentation.
+Gitleaks 8.30.1 is used with redaction for working files, exact staged changes, and reachable repository history. The previous publication scans were clean; final scan and remote verification outcomes are reported with delivery. Binary screenshot content is assessed by visual review, not treated as scanned text by Gitleaks.
 
-Targeted inspection identifies a live Gateway URL and KB/Memory identifiers in the unchanged `starter/main.py`. These are account-specific access details, not detected credentials. The educational Gateway client is unsigned; this repository must remain PRIVATE. No collaborators or public links to source/evidence are added by this task.
+All eight captures were inspected. Deployment/cloud images contain account/resource identifiers, ARNs, log/operational paths, and session/request identifiers. No access key, secret key, AWS session token, password, or bearer credential was visible. These identifiers alone do not justify credential rotation or a history rewrite. Keep access restricted and redact operational details before broader sharing; no image alteration was needed for this private finalization.
 
-The copied file allowlist excludes `.aws/`, environment secrets, raw local responses, private `.bedrock_agentcore.yaml`, generated deployment folders, dependency ZIPs, virtual environments, caches, logs, and macOS metadata. There are no inherited original commits. A clean secret scan does not prove production security or perform vulnerability analysis of every dependency.
+The unchanged source retains the live Gateway URL and KB/Memory IDs. Its educational unsigned Gateway client remains an access concern requiring a separately authorized source/configuration review before broader sharing or production use. No live Gateway request was made. Account-specific deployment YAML, generated archives, environments, raw responses, and credential files remain excluded.
 
-## Verification boundaries
+## Verification boundaries and manual submission
 
-- The author reports six local functional successes, Runtime READY, and a successful cloud `ORD-001` invocation. No new runtime testing was performed.
-- Independent Code Interpreter execution, all-six cloud testing, load/security testing, and complete scoring-rubric compliance are not established.
-- A separate classroom scoring rubric was not supplied; review uses the preserved project instructions and source.
-- The original failed-build transcript is not retained. The exact dependency pin, compatible lockfile wheel, and previously inspected original Linux ARM64 archive support the documented compatibility resolution.
-- Private repository storage is the authorized scope. The Udacity license version discrepancy and redistribution rights remain unresolved; see [attribution](UDACITY_ATTRIBUTION.md).
+Independent sandbox execution and compliance with the unavailable official classroom rubric remain NOT VERIFIED; no missing mandatory code pattern was found in the supplied A–G criteria. A literal current READY state and complete trace delivery were not checked. No penetration/load test or production-security certification is implied.
+
+The original dependency failure transcript is still unavailable. The exact compatible pin, lockfile wheel, and previously inspected original Linux ARM64 dependency archive support the documented resolution. The screenshots are genuine uploaded evidence, not a reproducible execution attestation.
+
+The license's version inconsistency and redistribution questions remain documented in [UDACITY_ATTRIBUTION.md](UDACITY_ATTRIBUTION.md). No visibility change to Public or new collaborator access is part of this task. The author must compare the official rubric, confirm access, and perform the actual Udacity submission personally.
