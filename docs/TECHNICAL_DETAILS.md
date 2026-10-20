@@ -18,7 +18,7 @@ The detailed [starter README](../starter/README.md) is the implementation and op
 
 Module import initializes the model and AWS clients; syntax checks should not import the application. A non-empty prompt is required. Missing customer/session IDs become UUIDs, which means anonymous invocations do not automatically share the same customer memory.
 
-The handler discovers Gateway tools before reasoning. Gateway failure therefore prevents unrelated KB or browser requests from reaching the agent. It returns only the first assistant content block's text, and a caught exception returns a generic text error. Test response content and tool traces rather than relying on HTTP status alone.
+The handler discovers Gateway tools before reasoning. Gateway setup/discovery/cleanup errors are now classified separately and return a safe order/refund availability response; empty discovery is not considered success. The MCP transport and successful tool list are preserved. It returns only the first assistant content block's text, and a caught exception returns a generic text error. Test response content and tool traces rather than relying on HTTP status alone.
 
 The current environment sets `BYPASS_TOOL_CONSENT=true`. This permits headless operation, but it provides no authorization or business approval mechanism.
 
@@ -37,8 +37,8 @@ The configured project strategies are semantic facts and user preferences. Extra
 | Tier discount | Silver 0%, Gold 10%, Platinum 15%; applied after points |
 | Earning multiplier | Standard 1×, device 2×, fresh 5× on the final price |
 | Monetary rounding | Decimal, two places, `ROUND_HALF_UP` |
-| Complete output | Redeemed points, points/tier discounts, final total, savings, earned/remaining points |
-| Error path | Local floating-point tier discount only, `fallback: true` |
+| Complete output | Redeemed points, points discount, tier_discount_pct fraction, tier discount, total, savings, earned/remaining points |
+| Error path | Local tier discount only; eight keys, zero points redeemed/earned, unchanged balance, `fallback: true` |
 
 For the reported Gold / 4,250 points / $150 standard order: redeem 4,000 points, subtract $40, apply $11 tier discount, pay $99, save $51, earn 99 points, and finish with 349 points. This expected result is a calculation contract, not independent evidence that `executeCode` ran remotely.
 
@@ -59,3 +59,9 @@ Deployment, IAM apply, agent invocation, refund tools, and memory event creation
 ## Evidence and production boundaries
 
 All eight [screenshots](../evidence/README.md) are present, readable, and reviewed: six local scenarios, successful deployment, and one hosted order invocation. Screenshot 05 verifies the calculator call and complete numbers without independently proving sandbox execution. Screenshot 06 shows browser-tool retrieval from example.com; its Safari window is separate. Screenshot 07 includes a trace-delivery warning, so observability is not fully verified. Full six-scenario cloud repetition, sandbox execution, concurrency/load behavior, and security hardening remain unverified. The [code-level audit](RUBRIC_AUDIT.md) maps the supplied A–G criteria; the separate official classroom rubric was unavailable.
+
+## Attempt 2 result contract
+
+The reviewer specifically required `tier_discount_pct`, which was missing from the original seven-field dictionary. It is now returned as 0.00, 0.10 or 0.15, with unknown tiers using 0.00. The existing Code Interpreter invocation and first-result stream handling remain, but the business JSON is extracted from documented stdout/text fields rather than exposing only the SDK envelope. See the [AWS result API](https://docs.aws.amazon.com/bedrock-agentcore/latest/APIReference/API_CodeInterpreterResult.html) and [invoke response](https://docs.aws.amazon.com/bedrock-agentcore/latest/APIReference/API_InvokeCodeInterpreter.html).
+
+All new executions in the [test log](../evidence/12_offline_regression_tests.txt) are mocked offline. Updated deployment, a fresh hosted order request, and hosted memory sessions A/B are still approval-gated. Earlier screenshot evidence cannot establish that this branch is deployed.

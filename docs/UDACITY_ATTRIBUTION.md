@@ -21,10 +21,14 @@ The notice names **NoDerivs 3.0** while linking to the **4.0** license URL. This
 
 The [4.0 legal code](https://creativecommons.org/licenses/by-nc-nd/4.0/legalcode.en) distinguishes private reproduction/adaptation from sharing adapted material and defines sharing in terms of providing material to the public. The [3.0 legal code](https://creativecommons.org/licenses/by-nc-nd/3.0/legalcode) uses different grants and restrictions. Neither observation settles the applicable Udacity course terms or supplies a general permission to redistribute this completed starter solution.
 
-The preparation review identified no explicit clause in the inspected project files specifically prohibiting storage in the author's own private GitHub repository. Publication is therefore limited to the author's PRIVATE repository with no collaborators added by this task. This is an operational boundary, not a legal determination or confirmation that private sharing is permitted. Confirm applicable course/rights-holder permissions before granting access to others, distributing modified content, using it commercially, or making any repository public.
+On 20 October 2026, the author explicitly confirmed that public redistribution is permitted and requested PUBLIC GitHub visibility while retaining the existing resource configuration. Publication follows that author confirmation; this task did not independently inspect the separate permission document or make a legal determination. The original LICENSE.txt remains unchanged, including its version inconsistency and conditions. No MIT/Apache replacement license is applied. The confirmation and public visibility do not authorize AWS operations or secure the unsigned Gateway.
 
 ## Authorship and scope
 
 Author / repository owner: [Aarush Rajan Ranjan / Hatch5t](https://github.com/Hatch5t).
 
 New documentation describes the inspected completed implementation and the author's reported results; it does not claim ownership of Udacity's starter content. AWS, Amazon, Udacity, Strands, Python, and MCP names identify their respective platforms and technologies. No endorsement or production certification is implied.
+
+## Attempt 2 source changes
+
+The initial copy preserved source byte-for-byte. Reviewer-driven remediation now changes only the Gateway lifecycle/error handling and loyalty result contract in starter/main.py, with offline tests added. RAG, Browser registration, MemoryHook, Lambda implementations, dependencies, reflection and original notices remain preserved. See the [current audit](RUBRIC_AUDIT.md).

@@ -59,3 +59,7 @@ Customer identity currently comes from an untrusted payload field. Production au
 IAM execution/service roles govern AWS integrations, while Gateway inbound access is a separate boundary. CloudWatch provides AWS execution logs; both Lambda handlers print events. There is no custom dashboard, alarm configuration, or application tracing setup in the supplied source.
 
 KB passages, memories, webpages, and model tool arguments are untrusted inputs. The repository documents these risks but does not claim to implement a comprehensive prompt-injection defense, URL allowlist, or production transaction policy.
+
+## Attempt 2 remediation boundary
+
+Gateway connection and discovery now run inside a scoped lifecycle helper with timeout/connection/unexpected-error handling, empty-tool rejection, a safe availability message and diagnostic logs. The transport, tool targets, model, RAG, Browser and MemoryHook remain unchanged. The loyalty tool's JSON contract adds tier_discount_pct and exposes the eight business fields from the existing result event. Neither change is evidence of a new cloud deployment; live verification awaits explicit approval.

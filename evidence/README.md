@@ -1,10 +1,24 @@
-# Verified demonstrations
+# Evidence index — original demonstrations and Attempt 2 status
 
-**8/8 screenshots present, readable, and reviewed.** These are the author's existing test captures, retained without image edits. The evidence is carried forward from `codex/initial-submission` to `main`.
+**8/8 screenshots present, readable, and reviewed.** These are the author's original test captures, retained without image edits. They predate the remediation and do not prove that the updated code is deployed.
 
 The first six captures show local application invocations that still use AWS integrations. The last two show deployment and a hosted Runtime invocation. This review inspected the captures and source; it did not repeat live AWS operations.
 
-## Evidence index
+## Udacity Attempt 2 — Reviewer Feedback Addressed
+
+**Fresh hosted tests are awaiting explicit approval.** [Original successful cloud command/response](CLOUD_INVOCATION_ORIGINAL.md) is prominent for the deployment-evidence concern. [Actual offline output: 35 passing tests](12_offline_regression_tests.txt) verifies the new Gateway/schema paths with mocks, not AWS.
+
+| Attempt 2 artifact | Status | Meaning |
+| --- | --- | --- |
+| [CLOUD_INVOCATION_ORIGINAL.md](CLOUD_INVOCATION_ORIGINAL.md) | ORIGINAL CLOUD EVIDENCE | Readable transcription and link to genuine screenshot 08; not a new deployment |
+| [12_offline_regression_tests.txt](12_offline_regression_tests.txt) | OFFLINE VERIFIED | 35 real local unittest results, including mocked SDK execution |
+| `09_cloud_invoke_attempt2.txt` | NOT YET CREATED | Reserved for genuine updated hosted invocation after approval |
+| `10_memory_session_A.txt` | NOT YET CREATED | Reserved for genuine hosted session A |
+| `11_memory_session_B.txt` | NOT YET CREATED | Reserved for genuine hosted session B after extraction delay |
+
+No empty transcript or fabricated screenshot is included. Hosted memory requires actual `agentcore invoke` A/B evidence; the local retry below is supplementary. Attempt 1 reviewer failures and remaining gates are tracked in the [audit](../docs/RUBRIC_AUDIT.md).
+
+## Original screenshot index
 
 | Screenshot | Scenario | What the capture demonstrates | Execution | Verification |
 | --- | --- | --- | --- | --- |
@@ -33,6 +47,6 @@ The first six captures show local application invocations that still use AWS int
 
 All eight images were inspected for sensitive material. Screenshots 07–08 contain account/resource identifiers, ARNs, operational paths, and request/session identifiers. These are not access keys, secret keys, session tokens, or bearer credentials; no such credential was visible in the captures. Identifiers alone do not grant access, so credential rotation or Git history rewriting is not warranted by these identifiers alone.
 
-Keep the repository PRIVATE and limit reviewer access. Redact identifiers, local paths, and operational details before broader sharing. The unchanged source also contains a live Gateway endpoint with an unsigned educational client; this is a separate access risk requiring review before broader distribution. No active Gateway call was made to assess its live authorization.
+The author confirmed public redistribution permission and chose PUBLIC visibility with existing configuration retained. Account/resource identifiers are not credentials, but the retained unsigned Gateway access details remain a separate exposure concern. The unchanged source also contains a live Gateway endpoint with an unsigned educational client; this is a separate access risk requiring review before broader distribution. No active Gateway call was made to assess its live authorization.
 
-No redaction was required for this private finalization, and no screenshots were altered or recreated. If a future redaction is needed, retain the original outside Git, label the redacted copy clearly, preserve genuine results, and review the staged image. Removing material in a later commit does not remove it from earlier commits; rewriting history requires explicit approval.
+No screenshots were redacted during the earlier private finalization or this public remediation, and no screenshots were altered or recreated. If a future redaction is needed, retain the original outside Git, label the redacted copy clearly, preserve genuine results, and review the staged image. Removing material in a later commit does not remove it from earlier commits; rewriting history requires explicit approval.

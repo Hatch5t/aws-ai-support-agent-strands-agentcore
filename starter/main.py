@@ -25,6 +25,7 @@ from bedrock_agentcore.memory import MemoryClient
 from strands.models import BedrockModel
 from strands.tools.mcp.mcp_client import MCPClient
 from mcp.client.streamable_http import streamable_http_client
+from contextlib import ExitStack, contextmanager
 import argparse, json
 import os, asyncio, boto3
 from strands.hooks import (
@@ -39,6 +40,7 @@ from strands_tools.browser import AgentCoreBrowser
 
 logging.basicConfig(level=logging.WARNING)
 logger = logging.getLogger("CSAI_Agent")
+logger.setLevel(logging.INFO)
 
 # ── TODO 1 — App Initialisation ───────────────────────────────────────────────
 # Create a BedrockAgentCoreApp instance.
@@ -467,6 +469,7 @@ remaining_points = (
 result = {{
     "points_redeemed": points_redeemed,
     "points_discount": float(points_discount),
+    "tier_discount_pct": float(tier_rates.get(tier, Decimal("0.00"))),
     "tier_discount": float(tier_discount),
     "final_total": float(final_total),
     "total_savings": float(total_savings),
@@ -499,14 +502,39 @@ print(json.dumps(result))
                             "Code Interpreter execution failed"
                         )
 
-                    return json.dumps(result)
+                    # Return business fields rather than only the SDK envelope.
+                    structured = result.get("structuredContent") or {}
+                    if structured.get("exitCode", 0) != 0:
+                        raise RuntimeError("Code Interpreter returned a nonzero exit code")
+
+                    outputs = [structured.get("stdout", "")]
+                    outputs.extend(
+                        block.get("text", "")
+                        for block in result.get("content", [])
+                        if block.get("type") == "text"
+                    )
+                    required = {
+                        "points_redeemed", "points_discount", "tier_discount_pct",
+                        "tier_discount", "final_total", "total_savings",
+                        "points_earned", "remaining_points",
+                    }
+                    for output in outputs:
+                        try:
+                            breakdown = json.loads(output)
+                        except (TypeError, ValueError):
+                            continue
+                        if isinstance(breakdown, dict) and required <= breakdown.keys():
+                            return json.dumps(breakdown)
+
+                    raise RuntimeError("Code Interpreter returned no complete loyalty result")
 
             raise RuntimeError(
                 "Code Interpreter returned no result"
             )
 
 
-    except Exception as e:
+    except Exception:
+        logger.exception("Code Interpreter unavailable; using tier-only fallback")
         # TODO: Implement fallback calculation using tier discount only
         tier_rates = {
             "Silver": 0.00,
@@ -525,11 +553,64 @@ print(json.dumps(result))
         )
 
         return json.dumps({
+            "points_redeemed": 0,
+            "points_discount": 0.0,
+            "tier_discount_pct": tier_rates.get(tier, 0.00),
             "tier_discount": tier_discount,
             "final_total": final_total,
+            "total_savings": tier_discount,
+            "points_earned": 0,
+            "remaining_points": max(0, int(loyalty_points)),
             "fallback": True,
-            "message": "Code Interpreter unavailable. Tier discount only."
+            "message": (
+                "Code Interpreter unavailable. Tier discount only; "
+                "points were not redeemed or earned."
+            ),
         })
+
+
+GATEWAY_UNAVAILABLE_MESSAGE = (
+    "The order and refund services are temporarily unavailable. "
+    "Please try again later."
+)
+
+
+class GatewayUnavailableError(RuntimeError):
+    """Gateway setup or cleanup failed; callers receive a safe service message."""
+
+
+@contextmanager
+def gateway_tool_session():
+    """Discover tools and keep the MCP connection open for agent execution."""
+    stack = ExitStack()
+    try:
+        try:
+            mcp_client = stack.enter_context(MCPClient(
+                lambda: streamable_http_client(GATEWAY_URL)
+            ))
+            gateway_tools = mcp_client.list_tools_sync()
+        except TimeoutError as error:
+            logger.exception("Gateway connection or tool discovery timed out")
+            raise GatewayUnavailableError(GATEWAY_UNAVAILABLE_MESSAGE) from error
+        except ConnectionError as error:
+            logger.exception("Gateway connection or tool discovery failed")
+            raise GatewayUnavailableError(GATEWAY_UNAVAILABLE_MESSAGE) from error
+        except Exception as error:
+            logger.exception("Unexpected Gateway connection or discovery failure")
+            raise GatewayUnavailableError(GATEWAY_UNAVAILABLE_MESSAGE) from error
+
+        if not gateway_tools:
+            logger.warning("Gateway discovery returned no tools")
+            raise GatewayUnavailableError(GATEWAY_UNAVAILABLE_MESSAGE)
+
+        logger.info("Discovered %d Gateway tools", len(gateway_tools))
+        yield gateway_tools
+    finally:
+        try:
+            stack.close()
+        except Exception as error:
+            logger.exception("Gateway connection cleanup failed")
+            raise GatewayUnavailableError(GATEWAY_UNAVAILABLE_MESSAGE) from error
 
 
 # ── TODO 8 — Agent Entrypoint ─────────────────────────────────────────────────
@@ -582,12 +663,7 @@ async def invoke(payload, context=None):
             agent_core_browser.browser,
         ]
 
-        mcp_client = MCPClient(
-            lambda: streamable_http_client(GATEWAY_URL)
-        )
-
-        with mcp_client:
-            gateway_tools = mcp_client.list_tools_sync()
+        with gateway_tool_session() as gateway_tools:
             tools.extend(gateway_tools)
 
             system_prompt = (
@@ -611,6 +687,9 @@ async def invoke(payload, context=None):
             response = await agent.invoke_async(user_input)
 
             return response.message["content"][0].get("text", "")
+
+    except GatewayUnavailableError:
+        return GATEWAY_UNAVAILABLE_MESSAGE
 
     except Exception:
         logger.exception("Agent invocation failed")
