@@ -8,7 +8,15 @@ A Python support agent for a fictional e-commerce store, combining Amazon Nova 2
 
 This README documents the inspected Project 2 implementation. It is separate from the earlier Project 1 customer-support chatbot. Order and customer records are fixtures, and refund operations are simulated; no payment is transferred.
 
-> **Private educational repository.** Preserve the Udacity license and notices, keep embedded resource configuration private, and review redistribution restrictions before sharing. All eight genuine screenshots are now reviewed; see the evidence index for scope and qualifications. Cloning this repository does not provision AWS infrastructure.
+> **Attempt 2 remediation:** Gateway/schema fixes are offline-tested; updated cloud deployment and hosted memory evidence await explicit approval. Public visibility and retained resource configuration are the author's updated choices. Preserve the Udacity license/notices. Cloning alone does not provision AWS infrastructure.
+
+## Udacity Attempt 2 — Reviewer Feedback Addressed
+
+The real Attempt 1 review passed RAG, Browser and reflection, but failed Gateway error handling, loyalty output schema, hosted invocation evidence visibility, and cloud two-session memory evidence. The prior broad code-pattern audit is superseded by [reviewer-driven findings](../docs/RUBRIC_AUDIT.md).
+
+Gateway setup/cleanup now uses `gateway_tool_session()` with typed timeout/connection handling, unexpected-error logging, an empty-list guard and a safe fixed user response. `calculate_loyalty_discount` retains the correct arithmetic and sandbox invoke/result stream, adds fractional `tier_discount_pct`, and exposes all eight business keys from stdout/text JSON. Its fallback has the same keys, explicitly redeems/earns zero points, leaves the balance unchanged and labels reduced tier-only execution.
+
+[Original genuine cloud invocation](../evidence/CLOUD_INVOCATION_ORIGINAL.md) · [35-test offline log](../evidence/12_offline_regression_tests.txt). New Attempt 2 deployment/order and hosted memory A/B evidence are not yet available; no placeholder success files are supplied. No live AWS operation is performed without explicit approval.
 
 ## Contents
 
@@ -110,12 +118,12 @@ The implementation resides in [main.py](main.py):
 1. A single `BedrockAgentCoreApp` registers the async `invoke(payload, context=None)` entry point. Model, Memory, and Knowledge Base clients are initialized at module load.
 2. The handler requires a non-empty string `prompt`. Missing or empty `customer_id` and `session_id` values receive generated UUIDs. Stable customer IDs are needed for cross-session recall.
 3. Each request constructs a new `MemoryHook` and `AgentCoreBrowser`, then registers the Knowledge Base tool, loyalty tool, and browser tool.
-4. `MCPClient` connects to `GATEWAY_URL` using `streamable_http_client`. `list_tools_sync()` discovers the remote tools and adds them to the agent.
+4. `gateway_tool_session()` connects MCPClient to `GATEWAY_URL` using `streamable_http_client`. It handles context entry and discovery errors, rejects empty tools, logs the discovered count, and keeps the MCP context alive while the remote tools are used.
 5. A fresh Strands `Agent` receives Nova 2 Lite, the tools, the memory hook, and a system prompt directing tool selection and identifying refunds as mock operations.
 6. `agent.invoke_async(user_input)` runs reasoning and tool calls. The handler returns text from the first response content block.
-7. Memory hooks retrieve customer context before reasoning and save the completed turn afterward. Retrieval/save failures are logged; other invocation failures return a generic retry message.
+7. Memory hooks retrieve customer context before reasoning and save the completed turn afterward. Retrieval/save failures are logged; Gateway failures return a fixed order/refund availability message; other invocation failures retain the generic retry response.
 
-The code sets `BYPASS_TOOL_CONSENT=true` for headless operation. Tool availability does not guarantee that the model selected a particular tool on a particular request. Gateway discovery is performed for every invocation; a Gateway failure can prevent otherwise unrelated capabilities from running.
+The code sets `BYPASS_TOOL_CONSENT=true` for headless operation. Tool availability does not guarantee that the model selected a particular tool on a particular request. Gateway discovery is performed for every invocation; a Gateway failure returns a specific availability message before unrelated capabilities run.
 
 ## Gateway tools and workflows
 
@@ -178,7 +186,7 @@ Long-term extraction is asynchronous. The capture shows recall succeeded after r
 
 ## Loyalty discount computation
 
-`calculate_loyalty_discount(loyalty_points, tier, order_total, product_category="standard")` builds self-contained Python using `Decimal` and `ROUND_HALF_UP`, then sends it to `code_session(REGION).invoke("executeCode", ...)` with `language="python"` and `clearContext=True`. It returns the first result event as serialized JSON.
+`calculate_loyalty_discount(loyalty_points, tier, order_total, product_category="standard")` builds self-contained Python using `Decimal` and `ROUND_HALF_UP`, then sends it to `code_session(REGION).invoke("executeCode", ...)` with `language="python"` and `clearContext=True`. It still processes the first result event, rejects execution errors/nonzero exit codes, and parses the printed business JSON from `structuredContent.stdout` or text content. The tool exposes all eight required business fields at the top level; incomplete output takes the explicit fallback.
 
 The complete calculation follows these rules:
 
@@ -187,7 +195,7 @@ The complete calculation follows these rules:
 - Cap points redemption at 50% of the order value, rounded down to a 500-point block.
 - Apply Silver 0%, Gold 10%, or Platinum 15% to the subtotal after points redemption.
 - Round tier discount and final amount to cents; earn whole points on the final amount at 1× (`standard`), 2× (`device`), or 5× (`fresh`). Unknown tiers use 0%; unknown categories use 1×.
-- Return points redeemed, points discount, tier discount, final total, total savings, points earned, and remaining points including new earnings.
+- Return points redeemed, points discount, fractional tier discount percentage, tier discount, final total, total savings, points earned, and remaining points including new earnings.
 
 For the documented standard-order scenario (4,250 points, Gold, $150):
 
@@ -196,13 +204,14 @@ For the documented standard-order scenario (4,250 points, Gold, $150):
 | Points redeemed | 4,000 |
 | Points discount | $40.00 |
 | Subtotal after points | $110.00 |
+| Gold tier discount fraction | 0.10 |
 | Gold tier discount | $11.00 |
 | Final total | $99.00 |
 | Total savings | $51.00 |
 | Points earned | 99 |
 | Remaining points | 349 |
 
-If Code Interpreter raises an error or supplies no usable result, the tool returns a **tier-only fallback** using local floating-point arithmetic, with `fallback: true` and an explanatory message. It does not redeem or award points on that path. A Gold $150 order would therefore return $15 tier discount and $135 final total in fallback mode.
+If Code Interpreter raises an error or supplies no usable result, the tool returns a **tier-only fallback** using local floating-point arithmetic, with `fallback: true` and an explanatory message. It exposes all eight keys with zero points redeemed/earned and the original points balance, rather than fabricating a complete sandbox result. A Gold $150 order would therefore return $15 tier discount and $135 final total in fallback mode.
 
 Screenshot 05 shows the complete correct numerical breakdown. Independent Code Interpreter verification still requires session/tool execution evidence; the numbers alone cannot establish which execution path actually ran.
 
@@ -258,21 +267,23 @@ The original `.git` directory, `.DS_Store`, virtual environment, caches, raw `re
 
 ## Prerequisites and local installation
 
-- Authorized access to the private project and permission to use the Udacity starter content.
+- Permission to use the Udacity starter content and an authorized AWS environment for live execution.
 - Python 3.13, [uv](https://docs.astral.sh/uv/), and AWS CLI v2.
 - AWS credentials with access to the separately configured services in `us-east-1` and the configured Nova global inference profile. Review cross-region data-routing requirements.
 - Existing Lambda/API Gateway/Gateway, S3/Knowledge Base, and Memory resources with appropriate IAM roles.
 - Optional Node.js for MCP Inspector; it is not needed to run the Python handler.
 
-From the intended private GitHub checkout:
+From the GitHub checkout:
 
 ```bash
 git clone https://github.com/Hatch5t/aws-ai-support-agent-strands-agentcore.git
-cd aws-ai-support-agent-strands-agentcore/starter
+cd aws-ai-support-agent-strands-agentcore
+git switch codex/attempt2-reviewer-remediation
+cd starter
 uv sync --python 3.13 --locked
 ```
 
-The private clone requires GitHub access. For an existing local checkout, enter this independent repository's `starter/` directory. All subsequent project commands run from `starter/` unless stated otherwise.
+The public clone does not require private repository access. For an existing local checkout, enter this independent repository's `starter/` directory. All subsequent project commands run from `starter/` unless stated otherwise.
 
 Use `--locked` to reject an unintended lockfile change. Keep both [pyproject.toml](pyproject.toml) and [uv.lock](uv.lock). No `requirements.txt`, Dockerfile, or infrastructure template is included in this workspace.
 
@@ -442,7 +453,7 @@ curl --fail-with-body -X POST http://localhost:8080/invocations \
 
 The synthetic identity above is a proposed repeat-test input, not a claim about the exact original test transcript. Confirm both name and preference came from stored records.
 
-**5. Loyalty calculation — complete numerical breakdown verified in screenshot 05.** Expect the seven values in the loyalty table above. Preserve tool/session evidence separately to verify remote Code Interpreter execution.
+**5. Loyalty calculation — complete numerical breakdown verified in screenshot 05.** The updated output includes all eight business fields, including `tier_discount_pct: 0.10`; the old screenshot predates that added field. Preserve tool/session evidence separately to verify remote Code Interpreter execution.
 
 ```bash
 curl --fail-with-body -X POST http://localhost:8080/invocations \
@@ -467,9 +478,9 @@ curl --fail-with-body -X POST http://localhost:8080/invocations \
 | [Local screenshots 01–06](../evidence/README.md) | Tool calls and the six demonstration responses | Successful local scenarios, with memory success after retry and sandbox-execution qualification |
 | Original private configuration/archive (excluded) | Previously inspected Runtime metadata and Linux ARM64 dependencies | Configuration/packaging context; not a fresh service or execution check |
 
-All eight screenshots are now included and reviewed. The required [285-word reflection](../REFLECTION.md) is present. Independent Code Interpreter execution remains unverified because the loyalty capture does not show a sandbox result/session trace. The [rubric audit](../docs/RUBRIC_AUDIT.md) contains exact source-line references and the official-rubric availability limitation.
+All eight screenshots are now included and reviewed. The required [285-word reflection](../REFLECTION.md) is present. Independent Code Interpreter execution remains unverified because the loyalty capture does not show a sandbox result/session trace. The [reviewer audit](../docs/RUBRIC_AUDIT.md) records actual feedback and pending live-evidence gates.
 
-The reviewed deployment/cloud captures contain account identifiers and ARNs, which are not credentials. No active credential was visible, so the genuine images are retained unchanged in the PRIVATE repository. Redact operational details before broader distribution; do not expose the unchanged source's live Gateway endpoint publicly. No history rewrite or credential rotation was warranted solely by the identifiers reviewed.
+The reviewed deployment/cloud captures contain account identifiers and ARNs, which are not credentials. No active credential was visible, so the genuine images are retained unchanged in the original evidence set; the author has now authorized public visibility with the configuration retained. Redact operational details before broader distribution; do not expose the unchanged source's live Gateway endpoint publicly. No history rewrite or credential rotation was warranted solely by the identifiers reviewed.
 
 ## Technical challenges and resolutions
 
@@ -500,7 +511,7 @@ The current project is an educational demonstration. Before production use:
 
 The repository-wide [.gitignore](../.gitignore) excludes environments, Python/tool caches, `.env` secrets (with example/template exceptions), local AWS credentials/token files, `.aws/`, account-specific AgentCore settings, generated deployment data, logs, build outputs, temporary files, macOS files, and editor-local configuration. It retains source, `pyproject.toml`, `uv.lock`, the catalog, refund schema, documentation, configuration examples, and intentionally selected screenshots. The original raw `refund_test.json` was not copied; the ignore rule prevents accidental later inclusion.
 
-Ignore rules do not remove tracked files or protect prior commits. This independent repository excludes the original tracked `.DS_Store` and starts with fresh Git history. Scan the exact staged content and new history before publication; see the [validation record](../docs/VALIDATION.md). The original preparation found no credential/token pattern matches in inspected project text and reachable historical blobs. The source still contains a live Gateway endpoint and resource IDs, so this unchanged copy must remain private. No scan is a guarantee that no secret exists.
+Ignore rules do not remove tracked files or protect prior commits. This independent repository excludes the original tracked `.DS_Store` and starts with fresh Git history. Scan the exact staged content and new history before publication; see the [validation record](../docs/VALIDATION.md). The original preparation found no credential/token pattern matches in inspected project text and reachable historical blobs. The source still contains a live Gateway endpoint and resource IDs, so the author has explicitly chosen to retain these identifiers in the public copy; this is not a substitute for Gateway authorization. No scan is a guarantee that no secret exists.
 
 ## Known limitations
 
@@ -521,6 +532,6 @@ This work completes **Project 2 of the author's Udacity AWS AI & ML Nanodegree**
 
 The existing [LICENSE.txt](../LICENSE.txt) begins with **Copyright © 2012–2020, Udacity, Inc.** and grants educational-content rights subject to modified Creative Commons Attribution–NonCommercial–NoDerivatives terms where applicable. Its prose names a **3.0** license while its URL points to **4.0**; that inconsistency is preserved and needs review. The [CC BY-NC-ND 4.0 deed](https://creativecommons.org/licenses/by-nc-nd/4.0/) describes restrictions on distributing modified material. The applicable version, content markings, Udacity-specific modifications, course terms, and permission to redistribute this completed starter solution must be clarified with Udacity or the rights holder.
 
-No MIT, Apache, or other replacement license is applied. This README does not grant rights to Udacity-owned content, and private visibility does not itself resolve permission for sharing with collaborators or recruiters. Keep the initial repository private and limit access to authorized reviewers until redistribution rights are confirmed. Do not assume public portfolio hosting of the modified starter is permitted.
+No MIT, Apache, or other replacement license is applied. This README does not grant rights to Udacity-owned content, and private visibility does not itself resolve permission for sharing with collaborators or recruiters. On 20 October 2026 the author confirmed public redistribution permission and requested public visibility with existing configuration retained. This confirmation does not replace the original license or independently resolve its version discrepancy.
 
-**Author / repository owner:** [Hatch5t](https://github.com/Hatch5t). The GitHub destination is [Hatch5t/aws-ai-support-agent-strands-agentcore](https://github.com/Hatch5t/aws-ai-support-agent-strands-agentcore). This independent repository is prepared for private publication; the original repository and deployed AWS resources are unchanged.
+**Author / repository owner:** [Hatch5t](https://github.com/Hatch5t). The GitHub destination is [Hatch5t/aws-ai-support-agent-strands-agentcore](https://github.com/Hatch5t/aws-ai-support-agent-strands-agentcore). This independent repository is publicly visible at the author's request; the original repository and deployed AWS resources are unchanged.

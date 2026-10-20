@@ -1,47 +1,39 @@
-# Final repository validation
+# Attempt 2 validation record
 
-Reviewed on 19 October 2026. Scope is repository finalization, code inspection, uploaded screenshots, and documentation. No live agent endpoint, refund operation, memory event, deployment, IAM apply, or other AWS state change was run.
+Updated 20 October 2026. Source: dedicated remediation branch from main at c46a464. Offline checks precede any live deployment; AWS approval has not yet been supplied.
 
-## Offline checks
+## Verified offline changes
 
-| Check | Result |
+| Gate | Status / result |
 | --- | --- |
-| Source preservation | All four Python files, dependency manifest/lockfile, catalog, Lambda schema, and original license remain byte-for-byte unchanged |
-| Original starter | Original project files, Git HEAD/status, and original remote preserved |
-| Python syntax | Four sources parsed without importing the AWS application |
-| Manifest and lockfile | TOML parsed; dependencies unchanged; Python >=3.13 and lazy-object-proxy==1.12.0 checked; locked offline uv dry run resolves 109 packages without installing or editing the lockfile |
-| Loyalty arithmetic | Generated Decimal calculation checked offline against the documented seven-field result and redemption cap; this is not remote sandbox execution |
-| Rubric audit | 45 explicit checks with source-line/evidence references; supplied A–G implementation patterns PASS; official classroom rubric unavailable |
-| Screenshots | Eight PNGs decoded and visually reviewed; tracked file hashes checked against the evidence commit and remote branch |
-| Reflection | 285 body words, excluding heading; within 200–400 words |
-| Documentation | Maintained Markdown, local/section/source-line links, shell examples, JSON payloads, and screenshot references checked |
-| Mermaid | All three diagrams parsed with Mermaid 11 |
-| Git | Fresh main branch descends from latest evidence commit; no force push or deletion of codex/initial-submission; integrity and synchronization checked |
-| Exclusions | Credentials, .env, .aws, private AgentCore settings, generated archives, environments, caches, logs, and macOS files remain ignored; source and safe examples/images remain addable |
-| License and attribution | Original LICENSE.txt and archived instructions unchanged; no MIT/Apache replacement license |
+| Targeted source scope | Gateway lifecycle/error handling and loyalty result contract changed; RAG, Browser registration, MemoryHook, model/configuration, Lambda code, dependencies and reflection preserved |
+| Python | Changed application and test sources compile; all existing Python sources parse |
+| Gateway tests | 11 pass, including successful tools, entry/discovery timeouts and connection failures, unexpected exceptions, empty tools, constructor/cleanup failures, and model-error separation |
+| Loyalty tests | 21 pass; all eight keys, all numerical expectations, tiers/rates, points/cap rounding, result formats and explicit tier-only fallback |
+| Passing RAG regressions | 3 pass for Retrieve arguments/passage joining, missing-ID guard, and no-results response |
+| Total | 35 offline tests pass; [actual output](../evidence/12_offline_regression_tests.txt) |
+| Reflection | 285 body words; unchanged |
+| Previous screenshots | Eight original images retained unchanged; reviewed as historical evidence, not new Attempt 2 executions |
+| License | Original LICENSE.txt and archived instructions unchanged |
+| Documentation | Maintained Markdown, file/heading/source links, examples and all three Mermaid diagrams validated |
+| ZIP | Clean allowlist archive; no Git metadata, environments, credentials, deployment YAML, caches, raw private logs or nested generated archives |
 
-The archived upstream instructions retain 11 inherited Markdown style findings. They are preserved verbatim; maintained documentation passes the selected lint rules. Line length and table-column alignment are treated as preferences rather than errors.
+The tests load the actual application module with external AWS/Strands dependencies mocked. The generated calculator code is executed locally by the mock, not in AgentCore Code Interpreter. Passing offline numerical tests does not establish actual sandbox execution or deployment.
 
-## Evidence conclusions
+## AWS and evidence status
 
-The [evidence index](../evidence/README.md) links all eight real screenshots. Six show local application invocations; one shows deployment success; one shows a hosted order request. Their contents were reviewed rather than merely counting filenames.
+No deployment, IAM write, refund action, memory write or live agent invocation was performed for these checks. Updated Runtime deployment, hosted order invocation and hosted two-session memory recall are AWAITING EXPLICIT APPROVAL. No genuine Attempt 2 cloud/memory transcripts exist yet, and none is included as a passing result.
 
-Memory success is the later retry in screenshot 04; the earlier failed recall remains visible. Screenshot 05 establishes the calculator call and correct full numerical reply, not a raw Code Interpreter execution event. Screenshot 06 establishes displayed browser calls and example.com content, not that the manually opened Safari window is a managed session.
+The original [hosted invocation evidence](../evidence/CLOUD_INVOCATION_ORIGINAL.md) is prominent and remains genuine. Screenshot 04 shows a local two-session retry; it does not satisfy the reviewer's newly requested `agentcore invoke` A/B capture. The original deployment screenshot retains its trace-delivery warning.
 
-Screenshot 07 includes successful deployment output and a trace-delivery configuration warning. Complete observability and a fresh current READY query are not established. Screenshot 08 shows the cloud-hosted ORD-001 response. All-six independent cloud testing is not claimed.
+## Security and visibility
 
-## Security review
+GitHub initially reported PUBLIC during this task. Visibility was temporarily restored to private under the original instruction. The author then confirmed permission for public redistribution and explicitly requested PUBLIC visibility while retaining the existing configuration. Public visibility was restored under that updated authorization.
 
-Gitleaks 8.30.1 is used with redaction for working files, exact staged changes, and reachable repository history. The previous publication scans were clean; final scan and remote verification outcomes are reported with delivery. Binary screenshot content is assessed by visual review, not treated as scanned text by Gitleaks.
+The repository retains the live Gateway URL and KB/Memory IDs as the author requested. The educational Gateway client is unsigned. Public copies of those access details may exist; changing repository visibility is not endpoint authorization. No AWS security setting was changed, and any Gateway authorization/rotation work requires separate explicit approval. No active access key, secret key, session token or bearer credential was detected in the previously reviewed source/evidence. Account IDs and ARNs alone are not treated as credentials.
 
-All eight captures were inspected. Deployment/cloud images contain account/resource identifiers, ARNs, log/operational paths, and session/request identifiers. No access key, secret key, AWS session token, password, or bearer credential was visible. These identifiers alone do not justify credential rotation or a history rewrite. Keep access restricted and redact operational details before broader sharing; no image alteration was needed for this private finalization.
+Gitleaks scans working files, staged content, repository history and submission ZIP content with redaction. Binary screenshot text is reviewed visually rather than claimed to be scanned by Gitleaks. Final scan and remote/ZIP verification results are reported with delivery. No new credential values are logged or published by the tests.
 
-The unchanged source retains the live Gateway URL and KB/Memory IDs. Its educational unsigned Gateway client remains an access concern requiring a separately authorized source/configuration review before broader sharing or production use. No live Gateway request was made. Account-specific deployment YAML, generated archives, environments, raw responses, and credential files remain excluded.
+## Submission limitations
 
-## Verification boundaries and manual submission
-
-Independent sandbox execution and compliance with the unavailable official classroom rubric remain NOT VERIFIED; no missing mandatory code pattern was found in the supplied A–G criteria. A literal current READY state and complete trace delivery were not checked. No penetration/load test or production-security certification is implied.
-
-The original dependency failure transcript is still unavailable. The exact compatible pin, lockfile wheel, and previously inspected original Linux ARM64 dependency archive support the documented resolution. The screenshots are genuine uploaded evidence, not a reproducible execution attestation.
-
-The license's version inconsistency and redistribution questions remain documented in [UDACITY_ATTRIBUTION.md](UDACITY_ATTRIBUTION.md). No visibility change to Public or new collaborator access is part of this task. The author must compare the official rubric, confirm access, and perform the actual Udacity submission personally.
+The reviewer failed four criteria in Attempt 1; the earlier pre-review “ready” conclusion is superseded. Two code gaps are corrected and offline-tested. Updated deployment and hosted memory evidence remain outstanding; Attempt 2 is not claimed to have passed Udacity or to be fully live-verified. A draft submission ZIP may be reviewed now, but the final resubmission should wait for the genuine required live evidence or an explicit lab-expiry blocker.

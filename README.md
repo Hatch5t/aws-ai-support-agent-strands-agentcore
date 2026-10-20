@@ -13,7 +13,24 @@ A Python agent for a fictional e-commerce store that can look up orders, simulat
 
 Completed for **Project 2 of the Udacity AWS AI & ML Nanodegree**. This project is separate from the earlier customer-support chatbot.
 
-> **Private educational repository.** Order/customer records are fixtures and refunds are simulations. AWS infrastructure must be configured separately. All **eight screenshots have been reviewed**; the evidence index distinguishes local tests, cloud deployment, and hosted invocation. See [licensing](docs/UDACITY_ATTRIBUTION.md) before sharing or changing visibility.
+> **Educational repository — public by the author's request.** Order/customer records are fixtures and refunds are simulations. AWS infrastructure must be configured separately. All **eight screenshots have been reviewed**; the evidence index distinguishes local tests, cloud deployment, and hosted invocation. See [licensing](docs/UDACITY_ATTRIBUTION.md) before sharing or changing visibility.
+
+## Udacity Attempt 2 — Reviewer Feedback Addressed
+
+**Code corrections are offline-verified; updated AWS deployment and hosted memory evidence are awaiting explicit approval. Attempt 2 has not been graded by Udacity.** The earlier pre-review readiness conclusion is superseded by the actual Attempt 1 reviewer feedback.
+
+**Cloud evidence:** [Open the original successful agentcore invoke command and genuine response](evidence/CLOUD_INVOCATION_ORIGINAL.md) · [Original full-resolution cloud screenshot](evidence/08_cloud_invocation.png).
+
+| Reviewer failure | Correction / current status |
+| --- | --- |
+| Gateway failure handling | Context entry, discovery, timeouts, connection/unexpected failures, empty tools and cleanup now produce a safe availability response; successful discovery logs its count |
+| Code Interpreter output | Eight business fields, including fractional `tier_discount_pct`; actual result stdout/text parsed to top-level JSON; explicit eight-field tier-only fallback |
+| Cloud deployment evidence | Original genuine invocation made prominent; updated deployment, READY and hosted invocation not yet executed |
+| Cross-session Memory evidence | MemoryHook unchanged; hosted agentcore invoke A/B workflow awaits approval; old local retry remains supplementary |
+
+[Reviewer audit](docs/RUBRIC_AUDIT.md) · [35 passing offline tests](evidence/12_offline_regression_tests.txt) · [Test source](tests/test_remediation.py) · [Resubmission checklist](docs/SUBMISSION_CHECKLIST.md).
+
+Fresh `09_cloud_invoke_attempt2.txt`, `10_memory_session_A.txt`, and `11_memory_session_B.txt` will be created only from genuine approved runs. They do not exist yet. The clean Attempt 2 ZIP is an **offline review draft** until those live gates are completed or a lab-expiry blocker is documented.
 
 [Architecture](docs/ARCHITECTURE.md) · [Detailed setup](starter/README.md) · [Engineering notes](docs/TECHNICAL_DETAILS.md) · [Reflection](REFLECTION.md) · [Evidence](evidence/README.md) · [Submission checklist](docs/SUBMISSION_CHECKLIST.md)
 
@@ -21,7 +38,7 @@ Completed for **Project 2 of the Udacity AWS AI & ML Nanodegree**. This project 
 
 The engineering focus is the boundary between language-model reasoning and concrete tool contracts. Order retrieval uses a REST proxy integration, refunds use direct Lambda tool arguments, Knowledge Base retrieval returns passages, and memory hooks add customer context before the agent reasons. Each capability has its own failure modes and permissions.
 
-The implementation keeps those boundaries visible: one Runtime entry point, MCP tool discovery, explicit memory hooks, a retrieval tool, a remote computation tool with a reduced fallback, and a managed browser integration. The working Python source and dependency files are preserved from the completed project.
+The implementation keeps those boundaries visible: one Runtime entry point, MCP tool discovery, explicit memory hooks, a retrieval tool, a remote computation tool with a reduced fallback, and a managed browser integration. The passing features and dependency files are preserved; Attempt 2 changes are limited to the reviewer-identified Gateway and loyalty contract gaps.
 
 ## Six core capabilities
 
@@ -112,7 +129,7 @@ The refund [schema](starter/lambda/lambda_schema) exposes `initiate_refund`, `ch
 
 The tool sends Python using `Decimal` to AgentCore Code Interpreter. It redeems whole 500-point blocks, caps points redemption at 50% of order value, then applies the tier discount and awards new points.
 
-For 4,250 points, Gold tier, and a $150 standard order, the expected complete breakdown is **4,000 points redeemed, $40 points discount, $11 tier discount, $99 final total, $51 savings, 99 points earned, and 349 remaining points**.
+For 4,250 points, Gold tier, and a $150 standard order, the expected complete breakdown is **4,000 points redeemed, $40 points discount, 0.10 tier discount fraction, $11 tier discount, $99 final total, $51 savings, 99 points earned, and 349 remaining points**.
 
 A failure returns a reduced, explicitly marked tier-only calculation. A correct final number alone does not independently prove that remote sandbox execution occurred. [Calculation and fallback](starter/README.md#loyalty-discount-computation).
 
@@ -145,7 +162,7 @@ Screenshot 07 shows deployment success, and screenshot 08 shows a successful hos
 
 The deployment capture also shows an X-Ray/CloudWatch trace-delivery configuration warning. Deployment succeeded, but complete observability is not established. Private configuration and generated archives remain excluded.
 
-The [45-check audit](docs/RUBRIC_AUDIT.md) finds no mandatory code-pattern failure in the supplied A–G criteria. Independent Code Interpreter execution and the unavailable official classroom rubric remain explicitly unverified.
+The [reviewer-driven audit](docs/RUBRIC_AUDIT.md) records four Attempt 1 failures and three passes. Gateway/schema fixes pass offline tests, while updated hosting and cloud memory evidence remain outstanding. Independent sandbox execution is not claimed from numerical output.
 
 ## Installation and configuration
 
@@ -153,15 +170,17 @@ Prerequisites: Python 3.13, uv, AWS CLI v2, authorized AWS credentials, and the 
 
 ```bash
 git clone https://github.com/Hatch5t/aws-ai-support-agent-strands-agentcore.git
-cd aws-ai-support-agent-strands-agentcore/starter
+cd aws-ai-support-agent-strands-agentcore
+git switch codex/attempt2-reviewer-remediation
+cd starter
 uv sync --python 3.13 --locked
 ```
 
 Use the existing Python Starter Toolkit environment. The installed toolkit version is deprecated; its commands differ from the newer npm AgentCore CLI. Avoid mixing executables. See the [compatibility explanation](starter/README.md#prerequisites-and-local-installation).
 
-The unchanged `main.py` uses module-level `GATEWAY_URL`, `KB_ID`, `REGION`, and `MEMORY_ID` constants. It already contains account-specific settings. These are not environment-variable overrides, and no `.env` loader is implemented. Credentials must remain external to Git. See [AWS configuration](starter/README.md#aws-configuration) for temporary-profile guidance and illustrative resource placeholders.
+`main.py` continues to use module-level `GATEWAY_URL`, `KB_ID`, `REGION`, and `MEMORY_ID` constants. It already contains account-specific settings. These are not environment-variable overrides, and no `.env` loader is implemented. Credentials must remain external to Git. See [AWS configuration](starter/README.md#aws-configuration) for temporary-profile guidance and illustrative resource placeholders.
 
-The educational client opens an unsigned Gateway connection. This private copy preserves that implementation; securing it and removing embedded endpoint identifiers requires a separate authorized source change before broader sharing or production use.
+The educational client opens an unsigned Gateway connection. The author requested public visibility while retaining the existing configuration after confirming redistribution permission. That does not secure the educational Gateway. Any endpoint authorization/configuration changes require separate AWS approval.
 
 ## Local testing
 
@@ -220,7 +239,7 @@ Read the [reflection](REFLECTION.md) and [technical notes](docs/TECHNICAL_DETAIL
 
 - **Access boundaries:** the Gateway client is unsigned, customer IDs are caller-controlled, and tool consent is bypassed for headless execution. Production needs authenticated identities, secure Gateway access, ownership checks, and explicit controls for state-changing operations.
 - **Data protection:** memory and logs can retain prompts or tool payloads. Define access restrictions, encryption, retention, deletion, and customer-memory isolation. Both Lambda handlers currently log incoming events.
-- **Repository hygiene:** credentials, environment files, private deployment settings, logs, and dependency archives are excluded. The unchanged source retains resource identifiers; private visibility is essential and does not make the service secure.
+- **Repository hygiene:** credentials, environment files, private deployment settings, logs, and dependency archives are excluded. The retained source configuration contains resource identifiers; public retention of those identifiers is the author's explicit decision, not endpoint authorization.
 - **Application limits:** business data is mocked, refund state is not durable, KB citations are not rendered, raw conversation history is not replayed, and Gateway discovery is required per invocation.
 - **Verification limits:** eight screenshots are reviewed, all-six cloud coverage is not established, sandbox execution is not independently verified, and no load test, penetration test, or production-readiness certification is claimed.
 
@@ -236,7 +255,7 @@ See the [validation record](docs/VALIDATION.md), [full security discussion](star
 | [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) | Service paths, event contracts, and trust boundaries |
 | [docs/TECHNICAL_DETAILS.md](docs/TECHNICAL_DETAILS.md) | Lifecycle, arithmetic, memory, packaging, and operational notes |
 | [REFLECTION.md](REFLECTION.md) | 200–400 word project reflection |
-| [docs/RUBRIC_AUDIT.md](docs/RUBRIC_AUDIT.md) | 45 source/evidence checks with exact line references and remaining qualifications |
+| [docs/RUBRIC_AUDIT.md](docs/RUBRIC_AUDIT.md) | Actual reviewer outcomes, targeted fixes, offline verification, and pending live gates |
 | [docs/SUBMISSION_CHECKLIST.md](docs/SUBMISSION_CHECKLIST.md) | Completed checks and remaining manual submission actions |
 | [evidence/README.md](evidence/README.md) | Index of all eight genuine, reviewed screenshots |
 | [docs/upstream/UDACITY_PROJECT_INSTRUCTIONS.md](docs/upstream/UDACITY_PROJECT_INSTRUCTIONS.md) | Original upstream README preserved verbatim |
@@ -245,4 +264,4 @@ See the [validation record](docs/VALIDATION.md), [full security discussion](star
 
 Built by **[Aarush Rajan Ranjan / Hatch5t](https://github.com/Hatch5t)** for Udacity Nanodegree Project 2, based on the [Udacity AgentCore starter](https://github.com/udacity/cd14763-project-starter). AWS, Strands, and other product names identify technologies used; no endorsement is implied.
 
-The original [LICENSE.txt](LICENSE.txt) is unchanged. It contains educational-content restrictions referencing CC BY-NC-ND and a 3.0/4.0 version inconsistency. No replacement open-source license is applied. Keep this repository private; public redistribution and sharing of modified starter content require clarification. [Full attribution and licensing notes](docs/UDACITY_ATTRIBUTION.md).
+The original [LICENSE.txt](LICENSE.txt) is unchanged. It contains educational-content restrictions referencing CC BY-NC-ND and a 3.0/4.0 version inconsistency. No replacement open-source license is applied. The author confirmed permission for public redistribution on 20 October 2026. This is recorded as an author confirmation, not an independent legal determination; original license/version observations remain documented. [Full attribution and licensing notes](docs/UDACITY_ATTRIBUTION.md).

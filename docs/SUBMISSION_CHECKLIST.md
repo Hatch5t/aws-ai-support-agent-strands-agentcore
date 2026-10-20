@@ -1,45 +1,39 @@
-# Submission readiness checklist
+# Attempt 2 resubmission checklist
 
-[Evidence index](../evidence/README.md) · [Code-level rubric audit](RUBRIC_AUDIT.md) · [Reflection](../REFLECTION.md) · [Validation](VALIDATION.md) · [Original instructions](upstream/UDACITY_PROJECT_INSTRUCTIONS.md)
+[Reviewer matrix](RUBRIC_AUDIT.md) · [Original hosted invocation](../evidence/CLOUD_INVOCATION_ORIGINAL.md) · [Offline test log](../evidence/12_offline_regression_tests.txt) · [Evidence index](../evidence/README.md)
 
-## Audit basis
+## Completed offline
 
-The preserved project instructions and the author's supplied A–G criteria are mapped to exact source lines in [RUBRIC_AUDIT.md](RUBRIC_AUDIT.md). No separate official classroom scoring rubric was available locally or located by the public-source search; full compliance with that unavailable document is NOT VERIFIED. No Udacity account was accessed.
+- [x] Back up the original clean repository and Git history before editing.
+- [x] Use a dedicated remediation branch based on latest main; do not overwrite main or rewrite history.
+- [x] Handle Gateway context-entry/discovery failures, timeouts, connection errors, unexpected errors, empty tools and cleanup failures with safe user messages and diagnostic logging.
+- [x] Preserve successful MCP tool discovery, registration, order tracking and simulated refunds.
+- [x] Add fractional tier_discount_pct to the complete eight-field loyalty result.
+- [x] Preserve correct post-points tier math, caps, redemption blocks and earning rates.
+- [x] Parse the first SDK result's printed business JSON; keep explicit, consistent tier-only fallback.
+- [x] Pass 35 offline tests, including all required numerical values.
+- [x] Preserve RAG, Browser, MemoryHook, reflection, Lambda sources, manifest, lockfile and original license.
+- [x] Link the original genuine cloud invocation near the beginning of the root README.
+- [x] Preserve all eight original screenshots and distinguish their historical scope.
+- [x] Follow the author's updated public-visibility/retained-configuration decision and record remaining exposure concerns.
 
-## Completed checks
+## Required live gates — not yet completed
 
-| Requirement | Status | Basis |
-| --- | --- | --- |
-| A. App initialization, async entry point, hosted invocation | PASS | Source patterns plus screenshots 07–08 |
-| B. MCP connection, discovery, tool registration, responses | PASS | Source, schema, and screenshots 01–02 |
-| C. Decorated KB tool, docstring, Retrieve, passage joining, ID guard | PASS | Source and screenshot 03 electronics policy |
-| D. Namespace helper, hooks, retrieval, event saving, cross-session recall | PASS | Source and lower successful retry in screenshot 04 |
-| E. Loyalty tool, code string/rates/math, executeCode, result extraction, fallback | PASS for implementation and numbers | Source and screenshot 05; independent sandbox execution NOT VERIFIED |
-| F. AgentCore Browser initialization, tool registration, retrieval | PASS | Source and screenshot 06 terminal tool calls/example.com response |
-| G. Reflection length and required themes | PASS | 285 body words; architecture, dependency challenge, production considerations |
-| Eight genuine screenshots | PASS | 8/8 readable, content-reviewed, and linked in the evidence index |
-| Attribution and original license | PASS for preservation | Original LICENSE.txt and archived upstream instructions unchanged |
-| GitHub presentation and privacy | Verified in final delivery | Target default branch main; README/evidence links checked; repository remains PRIVATE |
+- [ ] Obtain explicit approval for AWS deployment and live testing.
+- [ ] Confirm the educational account/profile and existing resources are accessible; report expiry or permission failures honestly.
+- [ ] Deploy the updated agent and verify READY plus that the new code is hosted.
+- [ ] Capture genuine hosted order invocation in `evidence/09_cloud_invoke_attempt2.txt`.
+- [ ] Capture session A in `evidence/10_memory_session_A.txt`.
+- [ ] Wait at least 30 seconds, then use a distinct session B with the same actor; capture genuine recall in `evidence/11_memory_session_B.txt`.
+- [ ] Validate outputs, retain any failed attempts honestly, then rebuild the final ZIP and prepare the merge into main.
 
-No mandatory code-pattern failure was found in the criteria actually supplied. The six local demonstrations are distinct from the single hosted cloud order invocation. Screenshot 05 is not credited as execution-level sandbox proof, and Safari is not credited as the managed Browser session.
+The three absent live transcript files are not placeholders and are not marked as successes. Original screenshot 08 supports a prior hosted invocation; it cannot prove the updated branch is deployed. Original local memory screenshot 04 is supplementary and does not replace hosted A/B evidence.
 
-## Evidence checklist
+## Student submission
 
-- [x] Order tracking tool and ORD-001 shipping details.
-- [x] Simulated ORD-002 refund, APPROVED status, and $139.99 amount.
-- [x] Knowledge Base tool and demonstration electronics policy.
-- [x] Different memory session IDs and successful preference recall after retry; earlier failure acknowledged.
-- [x] Loyalty-tool call and complete seven-value numerical breakdown.
-- [x] Browser-tool calls and example.com content.
-- [x] Deployment Success output, including its observability warning.
-- [x] Hosted agentcore invoke and ORD-001 response.
-- [x] All captures reviewed for visible credentials and sensitive identifiers; genuine images retained unchanged in this private repository.
+- [ ] Compare against any additional official rubric text not supplied here.
+- [ ] Review the first-person 285-word reflection for accuracy.
+- [ ] Review the ZIP's README, source, reflection, assets and clearly labeled evidence; do not submit a draft as fully verified.
+- [ ] Submit manually through Udacity after the required evidence is complete or the genuine lab blocker is documented.
 
-## Remaining student actions
-
-- [ ] Compare the code-level audit with the current official classroom rubric. If it specifically requires remote sandbox execution evidence, supply a genuine matching session/result trace; the current screenshot does not independently prove it.
-- [ ] Review the first-person reflection for accuracy and course authorship requirements.
-- [ ] Confirm authorized reviewer access to the private repository and applicable Udacity licensing/submission instructions.
-- [ ] Submit through the required Udacity channel personally. Repository publication is not course submission.
-
-The deployment capture's X-Ray/CloudWatch trace-delivery warning remains unresolved; it does not negate the displayed deployment success and hosted response. No new AWS operation was performed to resolve it. Public redistribution rights remain subject to the existing [licensing observations](UDACITY_ATTRIBUTION.md).
+No Udacity submission or account access is performed by this task. No Attempt 2 Udacity pass is claimed.
