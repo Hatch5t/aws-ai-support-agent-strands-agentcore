@@ -1,52 +1,56 @@
-# Evidence index — original demonstrations and Attempt 2 status
+# Evidence index — Attempt 2 final submission
 
-**8/8 screenshots present, readable, and reviewed.** These are the author's original test captures, retained without image edits. They predate the remediation and do not prove that the updated code is deployed.
+Verified October 29, 2026. **13 genuine, unmodified screenshots are included:** eight original captures and five current hosted captures from `attempt2-screenshots-20261029` (`b6cad1f`). Four original October 28 response-only transcripts are also retained for audit. No screenshot or AWS response was fabricated, regenerated, edited or redacted.
 
-The first six captures show local application invocations that still use AWS integrations. The last two show deployment and a hosted Runtime invocation. This review inspected the captures and source; it did not repeat live AWS operations.
+[Reviewer criterion mapping](../docs/SUBMISSION_CHECKLIST.md) · [Detailed independent inspection](../docs/ATTEMPT2_VERIFICATION_REPORT.md) · [Evidence hashes](EVIDENCE_SHA256.json) · [Screenshot inspection metadata](SCREENSHOT_INSPECTION_2026-10-29.json)
 
-## Udacity Attempt 2 — Reviewer Feedback Addressed
+## Current reviewer-facing hosted evidence
 
-**Fresh hosted tests are awaiting explicit approval.** [Original successful cloud command/response](CLOUD_INVOCATION_ORIGINAL.md) is prominent for the deployment-evidence concern. [Actual offline output: 35 passing tests](12_offline_regression_tests.txt) verifies the new Gateway/schema paths with mocks, not AWS.
-
-| Attempt 2 artifact | Status | Meaning |
+| Original file | Verified image contents | Scope and limits |
 | --- | --- | --- |
-| [CLOUD_INVOCATION_ORIGINAL.md](CLOUD_INVOCATION_ORIGINAL.md) | ORIGINAL CLOUD EVIDENCE | Readable transcription and link to genuine screenshot 08; not a new deployment |
-| [12_offline_regression_tests.txt](12_offline_regression_tests.txt) | OFFLINE VERIFIED | 35 real local unittest results, including mocked SDK execution |
-| `09_cloud_invoke_attempt2.txt` | NOT YET CREATED | Reserved for genuine updated hosted invocation after approval |
-| `10_memory_session_A.txt` | NOT YET CREATED | Reserved for genuine hosted session A |
-| `11_memory_session_B.txt` | NOT YET CREATED | Reserved for genuine hosted session B after extraction delay |
+| [09_hosted_order.png](09_hosted_order.png) | Real `uv run --no-sync agentcore invoke` command for ORD-001; CUST-123, application session `attempt2-order-final`; hosted response SHIPPED, UPS, TRK987654321, delivery October 31, 2026; READY Runtime listing | PASS: command, target Runtime and hosted order response visible |
+| [10_memory_A.png](10_memory_A.png) | Payload introduces Jane, short bullet-point answers and board games for fresh actor `CUST-MEM-20261029-61D1976B`; app session `attempt2-fresh-memory-A`; Runtime A `56CECE82-C455-409B-B50E-B19047A5D6B5`; acknowledgement | PASS: payload/actor/application and Runtime IDs and acknowledgement visible. Literal shell invocation line cropped; no raw Memory write event shown |
+| [11_memory_B.png](11_memory_B.png) | Same actor; app session `attempt2-fresh-memory-B`; Runtime B `23A09AAB-BA5F-4FCA-A6FC-572D662FFB46`; request does not repeat facts; response recalls Jane, short bullet points and board games | PASS: fresh test with both session layers distinct and accurate recall. No measured extraction delay or internal Memory trace claimed |
+| [13_loyalty.png](13_loyalty.png) | Actual invoke command and hosted JSON with all eight required keys: 4000 redeemed, $40 points, 0.10 tier fraction, $11 tier discount, $99 total, $51 savings, 99 earned, 349 remaining | PASS for displayed hosted JSON/schema/math; raw Code Interpreter execution event not shown. Source and executed offline output independently verify the tool contract |
+| [14_runtime_details.png](14_runtime_details.png) | CustomerSupportAgent READY, version 2; updated October 28; source S3 bucket/object; local main.py SHA-256 | PASS for displayed deployment metadata. Does not prove byte identity of the deployed archive; anonymous artifact access returned 403 |
 
-No empty transcript or fabricated screenshot is included. Hosted memory requires actual `agentcore invoke` A/B evidence; the local retry below is supplementary. Attempt 1 reviewer failures and remaining gates are tracked in the [audit](../docs/RUBRIC_AUDIT.md).
+All hosted captures identify the existing CustomerSupportAgent Runtime in account 105833965496, us-east-1. The Runtime update is `2026-10-28T17:48:28.869077+00:00`. Screenshot 14 is the current READY/version metadata evidence; it is not relabeled as a fresh terminal “Deployment Success” log. The original successful deployment log remains screenshot 07.
 
-## Original screenshot index
+The JSON in screenshot 13 is the agent's displayed response, not a raw sandbox event. [Actual offline calculator output](16_offline_verification_2026-10-29.txt) is separately labeled and contains the same eight values. The [inspection report](../docs/ATTEMPT2_VERIFICATION_REPORT.md) keeps these evidence levels distinct.
 
-| Screenshot | Scenario | What the capture demonstrates | Execution | Verification |
-| --- | --- | --- | --- | --- |
-| [01_order_tracking.png](01_order_tracking.png) | Order tracking | `order-tracker___get_order`; `ORD-001`, `SHIPPED`, UPS, fixture tracking number, and estimated delivery | Local application | PASS |
-| [02_refund_processing.png](02_refund_processing.png) | Simulated refund | `refund-processor___initiate_refund`; `ORD-002`, refund identifier, `APPROVED`, and $139.99 | Local application | PASS; simulated transaction |
-| [03_rag.png](03_rag.png) | Knowledge Base RAG | `search_knowledge_base`; demonstration electronics policy: 15-day return window, original condition/accessories, and Prime return condition | Local application | PASS; displayed tool call and answer |
-| [04_cross_session_memory.png](04_cross_session_memory.png) | Cross-session preference recall | Same `CUST-123` actor, distinct `memory-test-A` / `memory-test-B` sessions; successful retry recalls short bullet-point answers and electronics | Local application | PASS on successful retry; earlier failure retained |
-| [05_loyalty_discount.png](05_loyalty_discount.png) | Loyalty arithmetic | `calculate_loyalty_discount`; 4,000 points redeemed, $40 points discount, $11 tier discount, $99 total, $51 savings, 99 earned points, and 349 remaining | Local application | PASS for tool call and numerical response; sandbox execution NOT VERIFIED |
-| [06_agentcore_browser.png](06_agentcore_browser.png) | Live webpage retrieval | Six `browser` call labels; response identifies example.com, “Example Domain,” and its first paragraph | Local application | PASS for displayed tool calls and retrieved response; Safari window is separate |
-| [07_deployment_success.png](07_deployment_success.png) | AgentCore deployment | `uv run agentcore deploy`, Direct Code Deploy output, “Deployment completed successfully,” and “Deployment Success” | Cloud deployment | PASS; trace-delivery warning also visible |
-| [08_cloud_invocation.png](08_cloud_invocation.png) | Hosted order request | `uv run agentcore invoke`, hosted session/request details, and `ORD-001` response with `SHIPPED`, item, carrier, tracking, and delivery details | Cloud Runtime | PASS for hosted order invocation |
+## Preserved historical evidence
 
-## Interpretation and limits
+| Original file | Genuine observation | Qualification |
+| --- | --- | --- |
+| [01_order_tracking.png](01_order_tracking.png) | Local order MCP call and ORD-001 SHIPPED, UPS/tracking/delivery | Original local application test, not the current hosted run |
+| [02_refund_processing.png](02_refund_processing.png) | Refund MCP call, ORD-002, APPROVED, $139.99 and refund ID | Preserved accepted simulated-refund evidence; no real payment |
+| [03_rag.png](03_rag.png) | Knowledge Base tool call and electronics 15-day return policy | Preserved reviewer-accepted RAG evidence |
+| [04_cross_session_memory.png](04_cross_session_memory.png) | Local A/B electronics/style preference retry succeeds after earlier failed recall | Earlier failure remains visible; superseded by the new fresh-actor hosted A/B test |
+| [05_loyalty_discount.png](05_loyalty_discount.png) | Local calculator selection and correct numerical answer | No raw sandbox event; predates added `tier_discount_pct`; superseded by current JSON screenshot 13 |
+| [06_agentcore_browser.png](06_agentcore_browser.png) | Browser tool calls and retrieved example.com heading/paragraph | Preserved reviewer-accepted Browser evidence; separate Safari window is not claimed as managed Browser stream |
+| [07_deployment_success.png](07_deployment_success.png) | Original Direct Code Deploy success report | Historical; trace-delivery warning retained; not an October 29 capture |
+| [08_cloud_invocation.png](08_cloud_invocation.png) | Original hosted ORD-001 command and shipping response | Historical, prior to Attempt 2 corrections |
+| [CLOUD_INVOCATION_ORIGINAL.md](CLOUD_INVOCATION_ORIGINAL.md) | Readable transcription of screenshot 08 | Authored transcription, not a raw new terminal log |
 
-**Memory:** read the lower portion of screenshot 04 for the successful retry. The earlier recall says it cannot access the preferences; that attempt is not counted as a success. The later response recalls both preferences under a different session ID. No extraction-duration measurement or full Memory service trace is shown.
+The original accepted [REFLECTION.md](../REFLECTION.md) remains unchanged at 285 body words.
 
-**Loyalty:** screenshot 05 shows the complete correct numerical response and calculator-tool selection. It does not display an `executeCode` result event, remote sandbox session, or trace proving the execution path. Source includes a reduced tier-only fallback. Do not infer independent sandbox verification from the agent's numerical answer.
+## Historical October 28 transcripts and offline records
 
-**Browser:** the evidence is the terminal's `browser` calls and returned example.com content. The manually opened Safari window on the right is not represented as the managed AgentCore Browser session or its visual stream. The capture does not reveal the managed session ID or raw automation trace.
+| File | Classification |
+| --- | --- |
+| [09_cloud_invoke_attempt2.txt](09_cloud_invoke_attempt2.txt) | Genuine older hosted shipping response, no input command/payload; superseded by current order screenshot |
+| [10_memory_session_A.txt](10_memory_session_A.txt) | Genuine older Jane/preference acknowledgement; incomplete command/actor/application-ID context |
+| [11_memory_session_B_distinct_runtime.txt](11_memory_session_B_distinct_runtime.txt) | Genuine older distinct-Runtime recall; new October 29 screenshots provide stronger fresh-actor/payload evidence |
+| [13_loyalty_attempt2.txt](13_loyalty_attempt2.txt) | Genuine historical inconsistent answer: says 10% ($15.00) despite $99 total. Retained unchanged; not presented as the passing current result |
+| [ATTEMPT2_TRANSCRIPT_INSPECTION.json](ATTEMPT2_TRANSCRIPT_INSPECTION.json) | Earlier text-log hashes and extracted identifiers/missing-field findings; inspection metadata, not AWS output |
+| [12_offline_regression_tests.txt](12_offline_regression_tests.txt) | Preserved original actual 35-test run |
+| [16_offline_verification_2026-10-29.txt](16_offline_verification_2026-10-29.txt) | Final actual 35/35 offline test output plus direct calculator JSON from locally executed generated Python; no AWS invocation |
+| [VALIDATION_SUMMARY.json](VALIDATION_SUMMARY.json) | Final package, links, staged-content and credential-scan checks; generated validation metadata |
 
-**Deployment:** screenshot 07 verifies the deployment-success report. It also includes a warning about X-Ray/CloudWatch trace-delivery configuration. Deployment success does not establish complete observability setup. A literal current `READY` status query is not shown; the author's READY statement is supported by the successful deployment and subsequent hosted invocation, not a fresh status check.
+All four historical text logs match their bytes in `c93aae6`. Restoring them alongside current screenshots preserves the audit trail without duplicating current scenario claims.
 
-**Coverage:** screenshots 01–06 are local application demonstrations. Screenshot 08 establishes one cloud order-tracking invocation. The repository does not claim six independently repeated cloud tests, continuous current service availability, or production readiness.
+## Security and authenticity
 
-## Security review
+All 13 PNGs were visually inspected and OCR-scanned. Current/staged text, all reachable preexisting Git history and ZIP contents were scanned for credential patterns. No AWS access keys, secret/session-token candidates, private keys or other credential candidates were detected. OCR/custom pattern scanning is not a guarantee against every secret format. Hashes verify preservation, not independent authentication of AWS service internals.
 
-All eight images were inspected for sensitive material. Screenshots 07–08 contain account/resource identifiers, ARNs, operational paths, and request/session identifiers. These are not access keys, secret keys, session tokens, or bearer credentials; no such credential was visible in the captures. Identifiers alone do not grant access, so credential rotation or Git history rewriting is not warranted by these identifiers alone.
-
-The author confirmed public redistribution permission and chose PUBLIC visibility with existing configuration retained. Account/resource identifiers are not credentials, but the retained unsigned Gateway access details remain a separate exposure concern. The unchanged source also contains a live Gateway endpoint with an unsigned educational client; this is a separate access risk requiring review before broader distribution. No active Gateway call was made to assess its live authorization.
-
-No screenshots were redacted during the earlier private finalization or this public remediation, and no screenshots were altered or recreated. If a future redaction is needed, retain the original outside Git, label the redacted copy clearly, preserve genuine results, and review the staged image. Removing material in a later commit does not remove it from earlier commits; rewriting history requires explicit approval.
+Operational metadata remains visible: author/machine paths, account IDs, ARNs, Runtime/request IDs and artifact locations. These are not authentication credentials. The public unsigned Gateway endpoint in the preserved source is a separate access risk requiring owner review; no live access probe, visibility change or infrastructure security change was performed.

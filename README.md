@@ -1,267 +1,111 @@
-# AI Support Agent with Amazon Bedrock AgentCore and Strands SDK
+# Customer Support Agent with Strands and Amazon Bedrock AgentCore
 
-**Model-driven support workflows with MCP tools, grounded answers, and customer memory.**
+Udacity AWS AI & ML Nanodegree · Project 2 · Attempt 2
 
-[![AWS: AgentCore](https://img.shields.io/badge/AWS-AgentCore-232F3E)](https://aws.amazon.com/bedrock/agentcore/)
-[![Amazon Bedrock: Nova 2 Lite](https://img.shields.io/badge/Amazon_Bedrock-Nova_2_Lite-FF9900)](https://aws.amazon.com/bedrock/)
-[![Python: 3.13](https://img.shields.io/badge/Python-3.13-3776AB)](starter/pyproject.toml)
-[![Strands: Agents SDK](https://img.shields.io/badge/Strands-Agents_SDK-6C47FF)](https://strandsagents.com/)
-[![MCP: Streamable HTTP](https://img.shields.io/badge/MCP-Streamable_HTTP-111827)](docs/ARCHITECTURE.md)
-[![Udacity: Project 2](https://img.shields.io/badge/Udacity-Project_2-02B3E4)](docs/UDACITY_ATTRIBUTION.md)
+Author: [Aarush Rajan Ranjan / Hatch5t](https://github.com/Hatch5t)
 
-A Python agent for a fictional e-commerce store that can look up orders, simulate refunds, retrieve product and policy information, remember preferences, calculate loyalty discounts, and browse live webpages. Amazon Nova 2 Lite selects the tools; Strands runs the agent loop; Amazon Bedrock AgentCore provides the hosted runtime and managed integrations.
+A customer-support agent for a fictional store. Amazon Nova 2 Lite selects tools through Strands; AgentCore Runtime hosts the application. The agent tracks fixture orders, simulates refunds, retrieves product policies, remembers customer preferences, calculates loyalty discounts and browses webpages.
 
-Completed for **Project 2 of the Udacity AWS AI & ML Nanodegree**. This project is separate from the earlier customer-support chatbot.
+**Attempt 2 verification, October 29, 2026:** all 35 offline regressions pass. Genuine hosted screenshots show order tracking, fresh cross-session Memory, the complete loyalty JSON response and Runtime version 2 in READY state. The Gateway and loyalty-schema corrections are preserved from `d3ee0cd`; accepted RAG, Browser and Reflection implementations are unchanged. This is a submission package, not a claim that Udacity has graded Attempt 2.
 
-> **Educational repository — public by the author's request.** Order/customer records are fixtures and refunds are simulations. AWS infrastructure must be configured separately. All **eight screenshots have been reviewed**; the evidence index distinguishes local tests, cloud deployment, and hosted invocation. See [licensing](docs/UDACITY_ATTRIBUTION.md) before sharing or changing visibility.
+[Reviewer checklist](docs/SUBMISSION_CHECKLIST.md) · [Evidence index](evidence/README.md) · [Reviewer audit](docs/RUBRIC_AUDIT.md) · [Validation](docs/VALIDATION.md) · [Detailed setup](starter/README.md) · [Reflection](REFLECTION.md)
 
-## Udacity Attempt 2 — Reviewer Feedback Addressed
+## Current hosted evidence
 
-**Code corrections are offline-verified; updated AWS deployment and hosted memory evidence are awaiting explicit approval. Attempt 2 has not been graded by Udacity.** The earlier pre-review readiness conclusion is superseded by the actual Attempt 1 reviewer feedback.
-
-**Cloud evidence:** [Open the original successful agentcore invoke command and genuine response](evidence/CLOUD_INVOCATION_ORIGINAL.md) · [Original full-resolution cloud screenshot](evidence/08_cloud_invocation.png).
-
-| Reviewer failure | Correction / current status |
-| --- | --- |
-| Gateway failure handling | Context entry, discovery, timeouts, connection/unexpected failures, empty tools and cleanup now produce a safe availability response; successful discovery logs its count |
-| Code Interpreter output | Eight business fields, including fractional `tier_discount_pct`; actual result stdout/text parsed to top-level JSON; explicit eight-field tier-only fallback |
-| Cloud deployment evidence | Original genuine invocation made prominent; updated deployment, READY and hosted invocation not yet executed |
-| Cross-session Memory evidence | MemoryHook unchanged; hosted agentcore invoke A/B workflow awaits approval; old local retry remains supplementary |
-
-[Reviewer audit](docs/RUBRIC_AUDIT.md) · [35 passing offline tests](evidence/12_offline_regression_tests.txt) · [Test source](tests/test_remediation.py) · [Resubmission checklist](docs/SUBMISSION_CHECKLIST.md).
-
-Fresh `09_cloud_invoke_attempt2.txt`, `10_memory_session_A.txt`, and `11_memory_session_B.txt` will be created only from genuine approved runs. They do not exist yet. The clean Attempt 2 ZIP is an **offline review draft** until those live gates are completed or a lab-expiry blocker is documented.
-
-[Architecture](docs/ARCHITECTURE.md) · [Detailed setup](starter/README.md) · [Engineering notes](docs/TECHNICAL_DETAILS.md) · [Reflection](REFLECTION.md) · [Evidence](evidence/README.md) · [Submission checklist](docs/SUBMISSION_CHECKLIST.md)
-
-## Project overview
-
-The engineering focus is the boundary between language-model reasoning and concrete tool contracts. Order retrieval uses a REST proxy integration, refunds use direct Lambda tool arguments, Knowledge Base retrieval returns passages, and memory hooks add customer context before the agent reasons. Each capability has its own failure modes and permissions.
-
-The implementation keeps those boundaries visible: one Runtime entry point, MCP tool discovery, explicit memory hooks, a retrieval tool, a remote computation tool with a reduced fallback, and a managed browser integration. The passing features and dependency files are preserved; Attempt 2 changes are limited to the reviewer-identified Gateway and loyalty contract gaps.
-
-## Six core capabilities
-
-| Capability | Example customer request | Implementation |
+| Scenario | Verified result | Original evidence |
 | --- | --- | --- |
-| Order tracking | “Can you track order ORD-001?” | MCP Gateway → API Gateway → order Lambda |
-| Simulated refunds | “Please refund my Kindle order ORD-002.” | MCP Gateway → refund Lambda |
-| Grounded answers | “What is the electronics return policy?” | Knowledge Base `Retrieve` → Nova response |
-| Cross-session recall | “Do you remember my communication preference?” | Semantic/user-preference records via `MemoryHook` |
-| Loyalty calculation | “Apply my 4,250 Gold points to a $150 standard order.” | Code Interpreter tool with a tier-only fallback |
-| Live web retrieval | “Visit example.com and report its heading.” | Strands browser tool → AgentCore Browser |
+| Runtime deployment | CustomerSupportAgent, READY, version 2; updated October 28, 2026 | [Runtime details](evidence/14_runtime_details.png) |
+| Order tracking | ORD-001 request; SHIPPED, UPS, TRK987654321, October 31 delivery | [Command and hosted response](evidence/09_hosted_order.png) |
+| Memory Session A | Fresh fictional actor introduces Jane, short bullet-point answers and board games | [Payload, Runtime ID and acknowledgement](evidence/10_memory_A.png) |
+| Memory Session B | Same actor, different application/Runtime IDs; recalls all three facts without them in the request | [Payload, Runtime ID and recall](evidence/11_memory_B.png) |
+| Loyalty | All eight JSON fields; 4,000 points redeemed, $40 points discount, 10% tier rate, $11 tier discount, $99 total, $51 saved, 99 earned, 349 remaining | [Command and hosted JSON response](evidence/13_loyalty.png) |
+| Refund, RAG and Browser | Original genuine demonstrations preserved; no unnecessary AWS retest | [Historical evidence and limits](evidence/README.md#preserved-historical-evidence) |
 
-## Technology stack
+Two verification limits remain explicit. The loyalty screenshot displays the **agent's JSON response**, not a raw Code Interpreter result event. Source and executed offline regressions verify the structured tool contract and arithmetic. Runtime metadata and the matching **local** source digest do not establish deployed-package byte identity: anonymous read-only access to the recorded S3 artifact returned HTTP 403. Neither limitation is hidden or represented as a verified execution trace. [Full provenance and limits](docs/ATTEMPT2_VERIFICATION_REPORT.md).
 
-| Layer | Technologies |
-| --- | --- |
-| Language and dependencies | Python 3.13, uv, `pyproject.toml`, `uv.lock` |
-| Reasoning and orchestration | Amazon Nova 2 Lite (`global.amazon.nova-2-lite-v1:0`), Strands Agents SDK |
-| Hosting and tool protocol | AgentCore Runtime, AgentCore Gateway, MCP Streamable HTTP |
-| Business tools | Amazon API Gateway REST API, two AWS Lambda handlers |
-| Retrieval and storage | Amazon Bedrock Knowledge Base, Amazon S3 catalog source |
-| Context and managed tools | AgentCore Memory, Code Interpreter, Browser |
-| Access and operations | AWS IAM, CloudWatch execution logs, Boto3 |
-
-Resolved package versions and the Python Starter Toolkit compatibility notes are documented in [starter/README.md](starter/README.md#technology-stack).
-
-## AWS architecture
+## Architecture
 
 ```mermaid
 flowchart TD
-    CUSTOMER["Customer request"] --> RUNTIME["AgentCore Runtime: HTTP entry point"]
-    RUNTIME --> AGENT["Strands Agent in main.py"]
-    AGENT <--> NOVA["Amazon Bedrock: Nova 2 Lite"]
-
-    AGENT --> MCP["MCPClient: tool discovery and calls"]
-    MCP --> GATEWAY["AgentCore Gateway"]
-    GATEWAY --> API["API Gateway REST target"]
-    API --> ORDERS["Order Tracking Lambda"]
-    GATEWAY --> REFUNDS["Refund Lambda: simulated operations"]
-
-    AGENT --> RAG["RAG retrieval tool"]
-    RAG --> KB["Bedrock Knowledge Base: Retrieve"]
-    S3["S3: product_catalog.txt"] -.->|"configured ingestion"| KB
-
-    AGENT --> HOOK["MemoryHook"]
-    HOOK <--> MEMORY["AgentCore Memory: facts and preferences"]
-    AGENT --> LOYALTY["Loyalty calculation tool"]
-    LOYALTY --> CODE["AgentCore Code Interpreter"]
-    LOYALTY -.->|"on failure"| FALLBACK["Tier-only local fallback"]
-    AGENT --> TOOL["Strands browser tool"]
-    TOOL --> BROWSER["AgentCore Browser"]
-
-    IAM["IAM execution and service roles"] -.-> RUNTIME
-    IAM -.-> GATEWAY
-    RUNTIME -.-> LOGS["CloudWatch execution logs"]
-    ORDERS -.-> LOGS
-    REFUNDS -.-> LOGS
+    C["Client"] --> R["AgentCore Runtime"]
+    R --> A["Strands and Nova 2 Lite"]
+    A --> G["MCP Gateway"]
+    G --> O["API Gateway and order Lambda"]
+    G --> F["Refund Lambda"]
+    A --> K["Knowledge Base"]
+    A --> M["Memory hooks"]
+    A --> T["Code Interpreter and Browser"]
 ```
 
-The same handler can run in a local HTTP process. S3 ingestion and AWS service configuration are external setup, not automatic provisioning by `main.py`. The application does not fetch the catalog from S3 on every request. See [architecture boundaries](docs/ARCHITECTURE.md) for event contracts and trust boundaries.
+The module creates one `BedrockAgentCoreApp`. Its asynchronous `@app.entrypoint` handler validates the prompt, selects the customer/application session IDs and builds a new Strands agent. `app.run()` starts the Runtime server.
 
-## How a request is processed
+- **Gateway:** MCPClient uses Streamable HTTP to discover and retain API-backed order tools and Lambda-backed refund tools during invocation. Connection, timeout, discovery, empty-tool and cleanup failures are logged and mapped to a fixed safe availability response. Model errors remain separate.
+- **RAG:** `search_knowledge_base` calls Bedrock Knowledge Base Retrieve and returns policy/catalog passages to the model. Citations are not rendered in the final answer.
+- **Memory:** hooks retrieve semantic facts/preferences before reasoning and save the original customer query plus assistant response afterward. Actor namespaces persist across sessions; extraction is asynchronous. Full raw chat history is not automatically replayed.
+- **Code Interpreter:** the tool generates self-contained Decimal-based Python, invokes `executeCode` with `clearContext=True`, parses the result JSON and requires all eight business fields. Unavailable/invalid execution takes an explicit tier-only fallback.
+- **Browser:** the registered `AgentCoreBrowser.browser` tool retrieves web content. The accepted original capture shows tool calls and returned example.com content.
 
-1. A module-level `BedrockAgentCoreApp` receives a JSON payload with `prompt`, `customer_id`, and `session_id`.
-2. The handler validates the prompt and generates UUIDs for missing actor/session IDs.
-3. It constructs `MemoryHook` and Browser, connects to Gateway, and discovers MCP tools with `list_tools_sync()`.
-4. A fresh Strands `Agent` receives those tools, the Knowledge Base and loyalty tools, and the Nova model.
-5. The memory hook retrieves relevant stored records; Nova selects tools and composes the answer.
-6. The completed user/assistant turn is saved as a memory event. The handler returns text from the first assistant content block.
+[Service boundaries and contracts](docs/ARCHITECTURE.md) · [Technical details](docs/TECHNICAL_DETAILS.md)
 
-Each invocation constructs a new agent. Saved events do not imply that a complete prior conversation is automatically replayed.
+## Loyalty contract
 
-### MCP Gateway and business tools
+Points are worth $0.01, redeemed in blocks of 500 and capped at 50% of order value. Tier discounts are applied **after** redemption. Silver/Gold/Platinum use 0%/10%/15%; standard/device/fresh earn 1/2/5 points per dollar of the final total.
 
-The order handler expects API Gateway proxy events for `GET /orders/{order_id}`, `GET /customers/{customer_id}/orders`, and `GET /customers/{customer_id}`. The refund handler receives direct tool arguments and dispatches using `bedrockAgentCoreToolName` in Lambda client context.
+For 4,250 Gold points and a $150 standard order: `$150 − $40 = $110`, then `$110 × 0.10 = $11`, leaving `$99`. New points are 99; the balance becomes `4250 − 4000 + 99 = 349`.
 
-The refund [schema](starter/lambda/lambda_schema) exposes `initiate_refund`, `check_refund_status`, and `get_return_label`. Refund IDs and return labels are simulated; there is no payment processor or persistent refund database. [Integration details](starter/README.md#gateway-tools-and-workflows).
+```json
+{
+  "points_redeemed": 4000,
+  "points_discount": 40.0,
+  "tier_discount_pct": 0.10,
+  "tier_discount": 11.0,
+  "final_total": 99.0,
+  "total_savings": 51.0,
+  "points_earned": 99,
+  "remaining_points": 349
+}
+```
 
-### RAG and Knowledge Base retrieval
+This contract is asserted against actual locally executed calculator code in [the offline tests](tests/test_remediation.py). The fallback exposes the same keys, `fallback: true`, zero points redeemed/earned, the unchanged balance and a clear tier-only message. It is never presented as successful sandbox execution. An earlier October 28 response incorrectly said $15 for the tier amount; that unchanged [historical transcript](evidence/13_loyalty_attempt2.txt) is retained for audit, and [October 29 screenshot 13](evidence/13_loyalty.png) is the current reviewer-facing result.
 
-`search_knowledge_base()` calls the Bedrock Knowledge Base **Retrieve** API and returns text chunks to Nova. The educational [catalog](starter/product_catalog.txt) supplies products, policy rules, and loyalty information after separate S3 ingestion. The implementation does not return structured retrieval citations. [RAG details](starter/README.md#knowledge-base-rag).
+## Project structure
 
-### Cross-session memory
+| Path | Contents |
+| --- | --- |
+| [starter/main.py](starter/main.py) | Completed agent and tools; original instructional comments retained |
+| [starter/lambda/](starter/lambda/) | API Gateway order handler, direct refund handler and refund schema |
+| [starter/pyproject.toml](starter/pyproject.toml), [uv.lock](starter/uv.lock) | Required dependencies and resolved lockfile |
+| [starter/product_catalog.txt](starter/product_catalog.txt) | Demonstration Knowledge Base content |
+| [tests/](tests/) | 35 offline Gateway, loyalty and preserved RAG regressions |
+| [evidence/](evidence/) | 13 unmodified screenshots, historical transcripts, actual offline outputs and inspection metadata |
+| [docs/](docs/) | Architecture, operations, audit, verification and reviewer checklist |
+| [REFLECTION.md](REFLECTION.md) | Original accepted 285-word reflection |
 
-`MemoryHook` searches the configured semantic and user-preference namespaces before reasoning and saves each completed turn afterward. Recall requires a stable customer ID and asynchronous extraction. The reported cross-session test succeeded after retry. The application does not restore raw session history across requests. [Memory details](starter/README.md#short-term-and-long-term-memory).
+## Installation and testing
 
-### Code Interpreter and loyalty arithmetic
-
-The tool sends Python using `Decimal` to AgentCore Code Interpreter. It redeems whole 500-point blocks, caps points redemption at 50% of order value, then applies the tier discount and awards new points.
-
-For 4,250 points, Gold tier, and a $150 standard order, the expected complete breakdown is **4,000 points redeemed, $40 points discount, 0.10 tier discount fraction, $11 tier discount, $99 final total, $51 savings, 99 points earned, and 349 remaining points**.
-
-A failure returns a reduced, explicitly marked tier-only calculation. A correct final number alone does not independently prove that remote sandbox execution occurred. [Calculation and fallback](starter/README.md#loyalty-discount-computation).
-
-### AgentCore Browser
-
-The registered `AgentCoreBrowser.browser` tool supports live webpage access. Screenshot 06 shows browser-tool calls and returned example.com content. The manually opened Safari window is separate from the managed AgentCore Browser; no remote-session visual stream is claimed. [Browser details](starter/README.md#agentcore-browser).
-
-## Verified Demonstrations
-
-**Eight genuine captures, reviewed against the source.** The local screenshots invoke the application entry point directly from Python; they use AWS integrations while executing outside hosted Runtime. No live agent or AWS tool operation was repeated for this review.
-
-| Demonstration | Verified content | Execution | Screenshot |
-| --- | --- | --- | --- |
-| Order tracking | Order MCP tool, `ORD-001`, `SHIPPED`, carrier/tracking/delivery | Local application | [01 · Order](evidence/01_order_tracking.png) |
-| Simulated refund | Refund MCP tool, `ORD-002`, `APPROVED`, $139.99 | Local application | [02 · Refund](evidence/02_refund_processing.png) |
-| Knowledge Base RAG | `search_knowledge_base`; demonstration 15-day electronics policy | Local application | [03 · RAG](evidence/03_rag.png) |
-| Cross-session memory | Two session IDs; successful retry recalls bullet-point style and electronics | Local application | [04 · Memory](evidence/04_cross_session_memory.png) |
-| Loyalty calculation | Calculator call; 4,000 redeemed, $40 + $11 discounts, $99 total, 349 points remaining | Local application | [05 · Loyalty](evidence/05_loyalty_discount.png) |
-| Browser retrieval | Browser calls; example.com heading and paragraph | Local application | [06 · Browser](evidence/06_agentcore_browser.png) |
-| Successful deployment | Direct Code Deploy command and Deployment Success output | Cloud deployment | [07 · Deployment](evidence/07_deployment_success.png) |
-| Hosted order invocation | `agentcore invoke`; cloud response for `ORD-001` | Cloud Runtime | [08 · Cloud invocation](evidence/08_cloud_invocation.png) |
-
-The lower successful retry in the memory capture is credited; its earlier failed recall is not. The loyalty capture verifies the complete numerical answer and tool selection, **not independent sandbox execution**. The browser evidence is the terminal tool calls/response; the Safari window is not represented as a managed browser session.
-
-The [evidence index](evidence/README.md) explains each capture and its limits. [Local runbooks](starter/README.md#six-verified-local-scenarios) provide repeat-test examples rather than an exact transcript of every uploaded command.
-
-## Successful cloud deployment
-
-Screenshot 07 shows deployment success, and screenshot 08 shows a successful hosted `ORD-001` invocation. The author reports Runtime reached READY; no fresh status query was made during this review. Six independently repeated cloud scenarios are not claimed.
-
-The deployment capture also shows an X-Ray/CloudWatch trace-delivery configuration warning. Deployment succeeded, but complete observability is not established. Private configuration and generated archives remain excluded.
-
-The [reviewer-driven audit](docs/RUBRIC_AUDIT.md) records four Attempt 1 failures and three passes. Gateway/schema fixes pass offline tests, while updated hosting and cloud memory evidence remain outstanding. Independent sandbox execution is not claimed from numerical output.
-
-## Installation and configuration
-
-Prerequisites: Python 3.13, uv, AWS CLI v2, authorized AWS credentials, and the separately configured AWS integrations. Cloning alone does not provision them.
+Use Python 3.13+, uv and the project's Python AgentCore Starter Toolkit CLI. The newer npm CLI has a different project format; do not substitute it into this runbook. The existing AWS resources and an authorized profile are required for local application calls; cloning does not create infrastructure.
 
 ```bash
-git clone https://github.com/Hatch5t/aws-ai-support-agent-strands-agentcore.git
-cd aws-ai-support-agent-strands-agentcore
-git switch codex/attempt2-reviewer-remediation
 cd starter
-uv sync --python 3.13 --locked
+uv sync --locked --python 3.13
 ```
 
-Use the existing Python Starter Toolkit environment. The installed toolkit version is deprecated; its commands differ from the newer npm AgentCore CLI. Avoid mixing executables. See the [compatibility explanation](starter/README.md#prerequisites-and-local-installation).
-
-`main.py` continues to use module-level `GATEWAY_URL`, `KB_ID`, `REGION`, and `MEMORY_ID` constants. It already contains account-specific settings. These are not environment-variable overrides, and no `.env` loader is implemented. Credentials must remain external to Git. See [AWS configuration](starter/README.md#aws-configuration) for temporary-profile guidance and illustrative resource placeholders.
-
-The educational client opens an unsigned Gateway connection. The author requested public visibility while retaining the existing configuration after confirming redistribution permission. That does not secure the educational Gateway. Any endpoint authorization/configuration changes require separate AWS approval.
-
-## Local testing
-
-From `starter/`, start the saved HTTP entry point:
+Run regressions from the repository root; they stub external services and do not require AWS credentials:
 
 ```bash
-uv run --locked main.py
+python3 -m unittest discover -s tests -v
 ```
 
-In another terminal:
+The final audit ran 35/35 successfully under Python 3.12.14 with SDK stubs. This validates the source logic, not full production dependency imports or a new Python 3.13 installation. The deployment requirement and lockfile remain unchanged. [Actual final test output and structured tool result](evidence/16_offline_verification_2026-10-29.txt).
 
-```bash
-curl --fail-with-body -X POST http://localhost:8080/invocations \
-  -H 'Content-Type: application/json' \
-  -d '{"prompt":"Can you track order ORD-001?","customer_id":"CUST-123","session_id":"local-order-1"}'
-```
+Local server usage, authorized reproduction commands, resource setup and the direct-code deployment procedure are documented in [starter/README.md](starter/README.md). **No redeployment or repeat AWS test is needed for this submission.** The saved corrected application is already deployed; no infrastructure was changed during finalization.
 
-The payload is the direct JSON object. The top-of-file JSON CLI example refers to a dormant helper; `app.run()` starts the server in the saved version. Local requests still call AWS and may write memory events. The uploaded local captures instead use a direct Python call to the async `invoke()` handler; that does not start or prove an HTTP-server test. [Full local test instructions](starter/README.md#local-invocation).
+## Security and limitations
 
-## Deployment instructions
+This is a fixture-only educational application. Refunds are simulations. The unsigned Gateway, caller-controlled actor IDs and bypassed interactive consent require production authentication, ownership checks and transaction controls. Public source includes the configured Gateway endpoint; public visibility does not secure it. The owner should review authorization or disable the educational endpoint when no longer required. No visibility or AWS security setting was changed.
 
-The following is a reproduction procedure for an authorized deployment, not a request to redeploy the completed project:
+Current files, reachable Git history, 13 screenshots and the submission ZIP were checked for credential patterns; images were also reviewed visually and with OCR. No credential candidates were detected. The scanner is not a guarantee against every secret format. Account IDs, ARNs, source locations and session IDs remain visible as operational metadata. Credentials, environments, private deployment configuration and generated packages are excluded. [Security scope and validation limits](docs/VALIDATION.md).
 
-```bash
-# From starter/, using the Python Starter Toolkit CLI
-uv run --locked agentcore configure \
-  --entrypoint main.py \
-  --name CustomerSupportAgent \
-  --region us-east-1 \
-  --deployment-type direct_code_deploy \
-  --runtime PYTHON_3_13 \
-  --requirements-file pyproject.toml \
-  --disable-memory
+## Udacity attribution and license
 
-uv run --locked agentcore deploy
-```
-
-Direct Code Deploy packages Python and Linux ARM64 dependencies for Runtime. `--disable-memory` disables toolkit-created memory, not the explicit application `MemoryHook`. Inspect existing settings before reconfiguring any deployed agent.
-
-The existing `setup_permissions.py` helper has a no-AWS-call `--dry-run` option. Running it without that flag **changes IAM**, and it grants KB, Memory, and Browser actions rather than all integration permissions. Read the [complete deployment and permissions procedure](starter/README.md#agentcore-runtime-deployment) before any future deployment.
-
-## Engineering challenges and lessons
-
-| Challenge | Implemented response / lesson |
-| --- | --- |
-| Python 3.13 / Linux ARM64 native dependency compatibility | Pin `lazy-object-proxy==1.12.0`; the lockfile and original archive contain compatible artifacts |
-| Memory extraction delay | Allow asynchronous extraction; cross-session recall succeeded after retry |
-| Different tool event contracts | Keep API Gateway proxy routing distinct from direct Gateway Lambda arguments |
-| Retrieved context leaking into saved queries | Preserve the original user text before memory-context injection |
-| Remote calculation availability | Return an explicit tier-only fallback and distinguish it from complete results |
-| Reproducibility across environments | Local `uv sync --locked` preserves the lock; the inspected toolkit's deployment resolver is not proven to freeze all transitive dependencies |
-
-Read the [reflection](REFLECTION.md) and [technical notes](docs/TECHNICAL_DETAILS.md) for the design rationale and evidence boundaries.
-
-## Security considerations and known limitations
-
-- **Access boundaries:** the Gateway client is unsigned, customer IDs are caller-controlled, and tool consent is bypassed for headless execution. Production needs authenticated identities, secure Gateway access, ownership checks, and explicit controls for state-changing operations.
-- **Data protection:** memory and logs can retain prompts or tool payloads. Define access restrictions, encryption, retention, deletion, and customer-memory isolation. Both Lambda handlers currently log incoming events.
-- **Repository hygiene:** credentials, environment files, private deployment settings, logs, and dependency archives are excluded. The retained source configuration contains resource identifiers; public retention of those identifiers is the author's explicit decision, not endpoint authorization.
-- **Application limits:** business data is mocked, refund state is not durable, KB citations are not rendered, raw conversation history is not replayed, and Gateway discovery is required per invocation.
-- **Verification limits:** eight screenshots are reviewed, all-six cloud coverage is not established, sandbox execution is not independently verified, and no load test, penetration test, or production-readiness certification is claimed.
-
-See the [validation record](docs/VALIDATION.md), [full security discussion](starter/README.md#security-and-production-considerations), and [limitations](starter/README.md#known-limitations).
-
-## Repository guide
-
-| Location | Purpose |
-| --- | --- |
-| [starter/README.md](starter/README.md) | Detailed implementation, installation, configuration, and test runbooks |
-| [starter/main.py](starter/main.py) | Completed agent with original instructional comments retained |
-| [starter/lambda/](starter/lambda/) | Order/refund Lambda handlers and refund tool schema |
-| [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) | Service paths, event contracts, and trust boundaries |
-| [docs/TECHNICAL_DETAILS.md](docs/TECHNICAL_DETAILS.md) | Lifecycle, arithmetic, memory, packaging, and operational notes |
-| [REFLECTION.md](REFLECTION.md) | 200–400 word project reflection |
-| [docs/RUBRIC_AUDIT.md](docs/RUBRIC_AUDIT.md) | Actual reviewer outcomes, targeted fixes, offline verification, and pending live gates |
-| [docs/SUBMISSION_CHECKLIST.md](docs/SUBMISSION_CHECKLIST.md) | Completed checks and remaining manual submission actions |
-| [evidence/README.md](evidence/README.md) | Index of all eight genuine, reviewed screenshots |
-| [docs/upstream/UDACITY_PROJECT_INSTRUCTIONS.md](docs/upstream/UDACITY_PROJECT_INSTRUCTIONS.md) | Original upstream README preserved verbatim |
-
-## Udacity attribution and author
-
-Built by **[Aarush Rajan Ranjan / Hatch5t](https://github.com/Hatch5t)** for Udacity Nanodegree Project 2, based on the [Udacity AgentCore starter](https://github.com/udacity/cd14763-project-starter). AWS, Strands, and other product names identify technologies used; no endorsement is implied.
-
-The original [LICENSE.txt](LICENSE.txt) is unchanged. It contains educational-content restrictions referencing CC BY-NC-ND and a 3.0/4.0 version inconsistency. No replacement open-source license is applied. The author confirmed permission for public redistribution on 20 October 2026. This is recorded as an author confirmation, not an independent legal determination; original license/version observations remain documented. [Full attribution and licensing notes](docs/UDACITY_ATTRIBUTION.md).
+Based on [udacity/cd14763-project-starter](https://github.com/udacity/cd14763-project-starter). The original [LICENSE.txt](LICENSE.txt), educational notices and archived [project instructions](docs/upstream/UDACITY_PROJECT_INSTRUCTIONS.md) remain unchanged. No replacement open-source license is applied. See [attribution and redistribution notes](docs/UDACITY_ATTRIBUTION.md) before sharing. AWS, Strands and Udacity names identify the technologies and course; no endorsement is implied.

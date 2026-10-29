@@ -8,15 +8,17 @@ A Python support agent for a fictional e-commerce store, combining Amazon Nova 2
 
 This README documents the inspected Project 2 implementation. It is separate from the earlier Project 1 customer-support chatbot. Order and customer records are fixtures, and refund operations are simulated; no payment is transferred.
 
-> **Attempt 2 remediation:** Gateway/schema fixes are offline-tested; updated cloud deployment and hosted memory evidence await explicit approval. Public visibility and retained resource configuration are the author's updated choices. Preserve the Udacity license/notices. Cloning alone does not provision AWS infrastructure.
+> **Attempt 2 final verification — October 29, 2026:** 35/35 regressions pass. Five genuine current hosted screenshots now verify order tracking, a fresh cross-session Memory test, complete displayed loyalty JSON and READY Runtime version 2. The application remains unchanged from corrected source `d3ee0cd`; accepted features, original notices and dependencies are preserved.
 
 ## Udacity Attempt 2 — Reviewer Feedback Addressed
 
-The real Attempt 1 review passed RAG, Browser and reflection, but failed Gateway error handling, loyalty output schema, hosted invocation evidence visibility, and cloud two-session memory evidence. The prior broad code-pattern audit is superseded by [reviewer-driven findings](../docs/RUBRIC_AUDIT.md).
+The prior review passed RAG, Browser and reflection, and identified gaps in deployment evidence, Gateway failure handling, hosted Memory evidence and loyalty schema. [Current rubric audit](../docs/RUBRIC_AUDIT.md) · [Reviewer checklist](../docs/SUBMISSION_CHECKLIST.md).
 
-Gateway setup/cleanup now uses `gateway_tool_session()` with typed timeout/connection handling, unexpected-error logging, an empty-list guard and a safe fixed user response. `calculate_loyalty_discount` retains the correct arithmetic and sandbox invoke/result stream, adds fractional `tier_discount_pct`, and exposes all eight business keys from stdout/text JSON. Its fallback has the same keys, explicitly redeems/earns zero points, leaves the balance unchanged and labels reduced tier-only execution.
+Gateway setup/cleanup uses `gateway_tool_session()` with connection/timeout/unexpected-error logging, successful tool-count logging, empty-tool rejection and safe responses. The calculator returns all eight business keys, including fractional `tier_discount_pct`, parses actual result stdout/text and provides explicit tier-only fallback. [Actual 35-test output and offline structured result](../evidence/16_offline_verification_2026-10-29.txt).
 
-[Original genuine cloud invocation](../evidence/CLOUD_INVOCATION_ORIGINAL.md) · [35-test offline log](../evidence/12_offline_regression_tests.txt). New Attempt 2 deployment/order and hosted memory A/B evidence are not yet available; no placeholder success files are supplied. No live AWS operation is performed without explicit approval.
+[Hosted order 09](../evidence/09_hosted_order.png) shows the command and result. [Memory A 10](../evidence/10_memory_A.png) and [B 11](../evidence/11_memory_B.png) show a fresh common actor, different application/Runtime IDs and recall of Jane, short bullet points and board games. [Loyalty 13](../evidence/13_loyalty.png) shows all eight correct JSON values. [Runtime 14](../evidence/14_runtime_details.png) shows READY, version 2 and the October 28 update. All thirteen current/historical screenshots and four earlier response logs are retained unchanged; the older incorrect $15 response is historical, not current passing evidence.
+
+Evidence limits are explicit: the hosted JSON is an agent response rather than a raw sandbox event; the Runtime metadata and local hash do not prove deployed-package identity (anonymous artifact HEAD returned 403). Literal Memory shell command lines are cropped, although actual payloads/IDs/responses are visible. [Independent inspection and exact IDs](../docs/ATTEMPT2_VERIFICATION_REPORT.md). No AWS functional test was repeated, no infrastructure redeployed and no repository visibility changed during finalization.
 
 ## Contents
 
@@ -47,12 +49,12 @@ Gateway setup/cleanup now uses `gateway_tool_session()` with typed timeout/conne
 | Order tracking | Gateway → API Gateway → order Lambda | Successful locally; `ORD-001` also invoked in cloud Runtime |
 | Refund processing | Gateway → refund Lambda | Successful locally; simulated approval |
 | Product and policy answers | Bedrock Knowledge Base `Retrieve` tool | Successful local RAG scenario |
-| Cross-session recall | Semantic and user-preference memory retrieval | Successful locally after retry |
-| Loyalty breakdown | Code Interpreter tool with tier-only fallback | Complete numerical breakdown visible in screenshot 05; sandbox path unverified |
+| Cross-session recall | Semantic and user-preference memory retrieval | Current fresh hosted A/B screenshots verify name/style/board-games recall with distinct application and Runtime IDs |
+| Loyalty breakdown | Code Interpreter tool with tier-only fallback | Current hosted screenshot 13 shows all eight correct JSON fields; source/offline execution verifies tool schema/math, raw remote sandbox event unverified |
 | Live web retrieval | Strands `AgentCoreBrowser` | Successful local webpage retrieval |
-| Hosted execution | AgentCore Runtime, direct code deployment | Deployment Success and hosted `ORD-001` response visible in screenshots 07–08 |
+| Hosted execution | AgentCore Runtime, direct code deployment | Current screenshots 09 and 14 show successful invocation and READY version 2; historical 07–08 retained |
 
-The six functional results are supported by the eight reviewed captures indexed in [evidence/README.md](../evidence/README.md). The captured local tests call the async entry point directly from Python. They were not rerun during documentation preparation. All six scenarios are **not** claimed to have been independently repeated in deployed Runtime. A correct numerical response alone does **not** independently verify a Code Interpreter session or execution.
+The [evidence index](../evidence/README.md) distinguishes 13 genuine images: eight historical captures and five current hosted captures. Current order, fresh Memory and displayed loyalty JSON are hosted evidence; accepted Refund, RAG and Browser demonstrations remain preserved historical evidence. All six scenarios were not unnecessarily repeated in cloud Runtime. A displayed numerical or JSON response alone does not verify a raw Code Interpreter execution event.
 
 ## Technology stack
 
@@ -213,7 +215,7 @@ For the documented standard-order scenario (4,250 points, Gold, $150):
 
 If Code Interpreter raises an error or supplies no usable result, the tool returns a **tier-only fallback** using local floating-point arithmetic, with `fallback: true` and an explanatory message. It exposes all eight keys with zero points redeemed/earned and the original points balance, rather than fabricating a complete sandbox result. A Gold $150 order would therefore return $15 tier discount and $135 final total in fallback mode.
 
-Screenshot 05 shows the complete correct numerical breakdown. Independent Code Interpreter verification still requires session/tool execution evidence; the numbers alone cannot establish which execution path actually ran.
+Current [screenshot 13](../evidence/13_loyalty.png) shows all eight correct fields in the hosted agent response. [Actual offline output](../evidence/16_offline_verification_2026-10-29.txt) verifies the generated code and structured tool result independently. Neither screenshot 13 nor historical screenshot 05 captures a raw remote Code Interpreter event; that execution-trace limit is disclosed.
 
 ## AgentCore Browser
 
@@ -263,7 +265,7 @@ aws-ai-support-agent-strands-agentcore/
     └── 08_cloud_invocation.png
 ```
 
-The original `.git` directory, `.DS_Store`, virtual environment, caches, raw `refund_test.json`, private `.bedrock_agentcore.yaml`, and generated dependency archive/hash were not copied. No deployment configuration or original Git history is imported. All eight real screenshots are tracked and reviewed; the [evidence index](../evidence/README.md) links each capture and states what it supports. The original [Udacity instructions](../docs/upstream/UDACITY_PROJECT_INSTRUCTIONS.md) supply the available project checklist; a standalone scoring rubric was not provided.
+The original `.git` directory, `.DS_Store`, virtual environment, caches, raw `refund_test.json`, private `.bedrock_agentcore.yaml`, and generated dependency archive/hash were not copied. No deployment configuration or original Git history is imported. All thirteen real screenshots are tracked and reviewed; the [evidence index](../evidence/README.md) links each capture and states what it supports. The original [Udacity instructions](../docs/upstream/UDACITY_PROJECT_INSTRUCTIONS.md) supply the available project checklist; a standalone scoring rubric was not provided.
 
 ## Prerequisites and local installation
 
@@ -471,16 +473,17 @@ curl --fail-with-body -X POST http://localhost:8080/invocations \
 
 ### Cloud deployment and invocation evidence
 
-| Evidence | What is available | What it establishes / does not establish |
+| Evidence | Verified observation | Boundary |
 | --- | --- | --- |
-| [Deployment screenshot 07](../evidence/07_deployment_success.png) | Direct Code Deploy and Deployment Success output | Successful deployment report; trace-delivery warning is also visible; current READY not independently queried |
-| [Cloud screenshot 08](../evidence/08_cloud_invocation.png) | agentcore invoke and ORD-001 shipping response | One successful hosted order invocation, not all-six cloud coverage |
-| [Local screenshots 01–06](../evidence/README.md) | Tool calls and the six demonstration responses | Successful local scenarios, with memory success after retry and sandbox-execution qualification |
-| Original private configuration/archive (excluded) | Previously inspected Runtime metadata and Linux ARM64 dependencies | Configuration/packaging context; not a fresh service or execution check |
+| [Current hosted order 09](../evidence/09_hosted_order.png) | Actual command/payload, matching Runtime ARN and successful ORD-001 shipping response | Current hosted execution, not a claim of all-six live retesting |
+| [Current Memory A/B](../evidence/10_memory_A.png), [B](../evidence/11_memory_B.png) | Same fresh actor, different application and Runtime IDs; Jane/style/board-games acknowledged then recalled | Raw Memory event/extraction duration not captured; literal shell command lines cropped |
+| [Current loyalty JSON 13](../evidence/13_loyalty.png) | All eight expected fields and values | Agent's displayed JSON, not raw sandbox execution event |
+| [Runtime details 14](../evidence/14_runtime_details.png) | READY, version 2, update October 28, S3 artifact location and local main.py digest | Anonymous artifact HEAD returned 403; deployed source bytes not compared |
+| [Original evidence 01–08](../evidence/README.md#preserved-historical-evidence) | Genuine earlier local scenarios, deployment and hosted order | Preserved history; earlier failure/trace-delivery warning remains visible |
 
-All eight screenshots are now included and reviewed. The required [285-word reflection](../REFLECTION.md) is present. Independent Code Interpreter execution remains unverified because the loyalty capture does not show a sandbox result/session trace. The [reviewer audit](../docs/RUBRIC_AUDIT.md) records actual feedback and pending live-evidence gates.
+Runtime version 2 was updated `2026-10-28T17:48:28.869077+00:00`. The actual source artifact is recorded at bucket `bedrock-agentcore-codebuild-sources-105833965496-us-east-1`, key `CustomerSupportAgent/deployment.zip`. This is an operational location, not a credential or a verified copy of the deployed source. The local main.py hash matches the screenshot, but neither metadata nor local digest alone proves package identity. [Full verification limits](../docs/ATTEMPT2_VERIFICATION_REPORT.md).
 
-The reviewed deployment/cloud captures contain account identifiers and ARNs, which are not credentials. No active credential was visible, so the genuine images are retained unchanged in the original evidence set; the author has now authorized public visibility with the configuration retained. Redact operational details before broader distribution; do not expose the unchanged source's live Gateway endpoint publicly. No history rewrite or credential rotation was warranted solely by the identifiers reviewed.
+The original reflection remains unchanged at 285 words. All screenshots/logs were preserved byte-for-byte, checked visually and scanned for credential patterns/OCR text. Account identifiers, ARNs and session IDs remain visible as operational metadata. Public unsigned-Gateway access remains a separate owner security concern; no live Gateway probe, authorization or visibility change was made.
 
 ## Technical challenges and resolutions
 
@@ -521,7 +524,7 @@ Ignore rules do not remove tracked files or protect prior commits. This independ
 - Account configuration is embedded in `main.py`; a `.env` file or similarly named environment variables cannot replace it automatically.
 - Gateway discovery occurs on every request; there is no implemented degraded mode for Gateway failure.
 - Knowledge retrieval returns text without source metadata/citation rendering. Some catalog entries contain product-specific return windows as well as general rules; preserve the fixture context rather than claiming universal current policies.
-- Code Interpreter fallback provides fewer results than the complete calculation and uses different arithmetic. Independently verified remote execution is not established by the saved evidence.
+- Code Interpreter fallback returns the same eight-field schema, but computes only the tier discount with local floating-point arithmetic and explicitly redeems/earns zero points. Independently verified remote execution is not established by the saved evidence.
 - Only the first assistant content block is returned; exceptions become a generic text response that can hide a failed invocation from a status-only check.
 - Tool choice and natural-language replies are nondeterministic. Full negative-case, concurrency, load, isolation, and all-six cloud regression testing are not evidenced.
 - The pinned Python Starter Toolkit is deprecated. Migration, dependency upgrades, and production hardening require separate implementation and verification.

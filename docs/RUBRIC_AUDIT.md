@@ -1,51 +1,37 @@
-# Attempt 2 — reviewer-driven compliance audit
+# Attempt 2 reviewer-driven rubric audit
 
-Updated 20 October 2026. The author's supplied Attempt 1 reviewer feedback supersedes the earlier pre-review audit. Udacity passed RAG, Browser, and reflection, and failed deployment evidence, Gateway failure handling, cross-session memory evidence, and Code Interpreter output fields. No Udacity account was accessed.
-
-The earlier audit counted seven loyalty fields and did not check the reviewer's required `tier_discount_pct`. That was an omission; the current audit checks all eight fields. Successful local examples and an original hosted screenshot are not treated as proof that the remediated code is deployed or that the requested hosted memory workflow passed.
+Verified October 29, 2026. **READY_TO_SUBMIT for the supplied requirements, with evidence limits stated below.** This is an independent source/evidence audit, not an Attempt 2 Udacity grade. Original Attempt 1 outcomes are preserved from the prior audit/PR summary; the original reviewer attachment and complete standalone scoring document are unavailable. The [archived project instructions](upstream/UDACITY_PROJECT_INSTRUCTIONS.md) and the author's current requirements supply the detailed acceptance checks.
 
 ## Reviewer matrix
 
-| Criterion | Attempt 1 | Attempt 2 status | Evidence |
+| Criterion | Recorded Attempt 1 result | Verified Attempt 2 result | Source, tests and genuine evidence |
 | --- | --- | --- | --- |
-| Cloud deployment | FAIL: hosted invocation evidence not accepted/located | Original genuine cloud evidence made prominent; updated deployment/invocation AWAITING APPROVAL | [Original hosted invocation](../evidence/CLOUD_INVOCATION_ORIGINAL.md), [screenshot 08](../evidence/08_cloud_invocation.png) |
-| MCP Gateway | FAIL: insufficient failure handling | OFFLINE VERIFIED: connection/context entry, discovery, empty tools, cleanup, safe errors and logging | [gateway_tool_session](../starter/main.py#L583), [tests](../tests/test_remediation.py), [35-test log](../evidence/12_offline_regression_tests.txt) |
-| Knowledge Base RAG | PASS | PRESERVED: source unchanged; 3 mocked regressions pass | [RAG function](../starter/main.py#L348), [screenshot 03](../evidence/03_rag.png) |
-| Long-term Memory | FAIL: agentcore invoke evidence from two hosted sessions requested | Hook unchanged; existing local retry evidence preserved; hosted A/B evidence AWAITING APPROVAL | [MemoryHook](../starter/main.py#L166), [local screenshot 04](../evidence/04_cross_session_memory.png) |
-| Code Interpreter | FAIL: required tier_discount_pct missing | OFFLINE VERIFIED: eight business fields, numerical regressions, result parsing and consistent fallback | [calculator](../starter/main.py#L399), [tests](../tests/test_remediation.py), [offline log](../evidence/12_offline_regression_tests.txt) |
-| Browser | PASS | PRESERVED: initialization/registration unchanged and checked in successful Gateway path | [browser registration](../starter/main.py#L658), [screenshot 06](../evidence/06_agentcore_browser.png) |
-| Reflection | PASS | PRESERVED: 285 body words, unchanged | [REFLECTION.md](../REFLECTION.md) |
+| A. Deploy an AI agent to cloud Runtime | FAIL: hosted evidence missing/unclear | PASS: module app, async decorated entrypoint and app.run; existing Runtime READY version 2, October 28 update; current hosted order command/response | [main.py](../starter/main.py#L53), [entrypoint](../starter/main.py#L631), [server](../starter/main.py#L714), [order 09](../evidence/09_hosted_order.png), [Runtime 14](../evidence/14_runtime_details.png) |
+| B. MCP Gateway | FAIL: insufficient error handling | PASS: MCPClient/Streamable HTTP, API-backed orders and Lambda-backed refunds, successful discovery logging; failure/empty-list/cleanup handling, safe fixed message; 11 offline cases pass | [gateway_tool_session](../starter/main.py#L583), [Gateway tests](../tests/test_remediation.py#L76), [hosted order](../evidence/09_hosted_order.png), [accepted refund](../evidence/02_refund_processing.png) |
+| C. Knowledge Base RAG | PASS | PRESERVED PASS: Retrieve/passage joining, missing-ID guard and no-results behavior; 3 offline regressions | [RAG](../starter/main.py#L348), [tests](../tests/test_remediation.py#L310), [original RAG 03](../evidence/03_rag.png) |
+| D. Long-term Memory | FAIL: hosted A/B evidence requested | PASS: fresh actor, same customer, different application IDs and actual Runtime IDs; B recalls Jane/style/board games without facts repeated in request | [MemoryHook](../starter/main.py#L166), [A 10](../evidence/10_memory_A.png), [B 11](../evidence/11_memory_B.png), [exact identifier comparison](ATTEMPT2_VERIFICATION_REPORT.md#fresh-memory-ab-independently-verified-payloads-and-sessions) |
+| E. Code Interpreter loyalty tool | FAIL: missing tier_discount_pct | PASS for required implementation/schema/math: @tool, self-contained Python, executeCode/clearContext, complete eight-field JSON and explicit fallback; 21 loyalty regressions; hosted displayed JSON matches | [calculator](../starter/main.py#L399), [schema/parser](../starter/main.py#L516), [exact regression](../tests/test_remediation.py#L205), [actual offline tool output](../evidence/16_offline_verification_2026-10-29.txt), [hosted JSON 13](../evidence/13_loyalty.png) |
+| F. AgentCore Browser | PASS | PRESERVED PASS: initialization/registration unchanged, covered by successful-tool regression; accepted browser calls/content preserved | [registration](../starter/main.py#L658), [successful-tools test](../tests/test_remediation.py#L113), [original Browser 06](../evidence/06_agentcore_browser.png) |
+| G. Written reflection | PASS | PRESERVED PASS: original 285-word body covers design decision, dependency/deployment challenge and production controls | [REFLECTION.md](../REFLECTION.md) |
 
-“OFFLINE VERIFIED” means mock-based execution of the changed code. It is not an AWS result or a Udacity grade. Attempt 2 has not been reviewed by Udacity and is not yet a fully live-verified resubmission.
+All 35 existing regressions pass: 11 Gateway + 21 loyalty + 3 RAG. They stub external services; hosted evidence is independently supplied by the genuine images. No accepted Refund/RAG/Browser/Reflection test was unnecessarily repeated against AWS.
 
-## Gateway remediation
+## Gateway review
 
-`gateway_tool_session()` retains MCPClient and Streamable HTTP, then uses ExitStack to keep the connection open for agent execution. Its targeted handling includes construction, entering the context, and `list_tools_sync()`; connection cleanup is handled as well. TimeoutError, ConnectionError, and unexpected failures are logged with `logger.exception()`. Empty discovery is logged explicitly and rejected. Successful discovery logs the tool count with `logger.info()`; the named application logger enables INFO output.
+The scoped helper constructs/enters MCPClient, calls list_tools_sync and keeps transport open through agent execution. TimeoutError, ConnectionError and unexpected setup/discovery exceptions are logged with logger.exception and become GatewayUnavailableError. Empty/None discovery is rejected with a warning; malformed/unexpected discovery exceptions are caught. Cleanup is protected. Successful discovery logs its tool count at INFO. A bad tool object that fails later registration reaches the generic logged agent-error path; no claim of complete MCP schema validation is made.
 
-Only Gateway setup/cleanup failures become GatewayUnavailableError. A downstream model/invocation error remains an agent error. Users receive a fixed availability message without URL, token, or exception detail. Eleven Gateway tests cover success, failures during both entry and discovery, empty results, constructor failure, cleanup failure, and correct classification of a model error. The existing order/refund tools remain registered on success.
+Users receive “The order and refund services are temporarily unavailable. Please try again later.” for classified Gateway failures, without endpoint/token/exception details. Downstream model failures remain logged agent errors and get a separate safe message. Tests cover construction, context entry, discovery, timeouts/connections, unexpected failures, empty tools, cleanup, successful order/refund registration and model-error separation. API-backed order and direct Lambda refund invocation evidence are both retained. No live Gateway fault was induced.
 
-## Structured loyalty output
+## Eight-field loyalty contract
 
-The generated Python still uses Decimal, 500-point redemption blocks, a 50% order-value cap, tier discount after points, and the original earning rates. Its result now contains:
+Required keys: points_redeemed, points_discount, tier_discount_pct, tier_discount, final_total, total_savings, points_earned and remaining_points. The tier rate is fractional: Gold 0.10, not 10. The exact regression and actual offline JSON assert 4000 redeemed/$40, $110 subtotal, $11 tier discount, $99 final total, $51 savings, 99 earned and 349 remaining. Tier discount follows points redemption in source.
 
-```text
-points_redeemed, points_discount, tier_discount_pct, tier_discount,
-final_total, total_savings, points_earned, remaining_points
-```
+The tool checks the result event/error/exit status, extracts JSON from stdout/text and validates required keys. Invalid or unavailable execution returns explicit tier-only fallback with all eight fields, zero redeemed/earned and unchanged balance. It does not invent successful sandbox execution.
 
-The fraction is 0.00 for Silver, 0.10 for Gold, 0.15 for Platinum, and 0.00 for an unknown tier. The first Code Interpreter result event is still checked for errors. The handler reads printed business JSON from documented `structuredContent.stdout` or text content, checks the required keys, and exposes those fields at the tool-output top level rather than returning only the SDK wrapper. A nonzero exit code, malformed/incomplete output, missing event, or unavailable service takes the explicit fallback.
+[Current screenshot 13](../evidence/13_loyalty.png) shows a complete matching agent JSON response. The older [October 28 transcript](../evidence/13_loyalty_attempt2.txt) with the incorrect $15 tier phrase is retained unchanged as historical evidence. A displayed agent response is not a raw Code Interpreter event; remote sandbox execution remains unconfirmed at that trace level. Source and locally executed regressions independently prove the corrected structured result. This limitation is disclosed under the author's finalization instructions and does not erase the verified implementation/schema checks.
 
-The fallback remains tier-only: no points redeemed or earned, unchanged points balance, tier rate/discount and final total, all eight keys, `fallback: true`, and a clear reduced-mode message. It does not claim successful sandbox execution.
+## Deployment provenance and release limits
 
-The Gold / 4,250 points / $150 standard-order test asserts 4,000 redeemed, $40 points discount, $110 subtotal, 0.10 rate, $11 tier discount, $99 total, $51 savings, 99 earned points and 349 remaining. Additional tests cover all tiers, unknown tiers, zero/insufficient points, block rounding/cap, small orders, device/fresh/default earning rates, SDK result formats, and failure/fallback paths.
+Runtime details show READY/version 2 and October 28 update plus S3 artifact location. The local main.py digest equals the digest displayed in screenshot 14. These facts do not prove deployed-source byte identity. Anonymous read-only artifact access returned HTTP 403; no archive could be compared, and no source-match claim is made. The [verification report](ATTEMPT2_VERIFICATION_REPORT.md) records the precise boundary and actual Memory IDs. Literal Memory shell commands are cropped, but original payloads, both ID layers and responses are visible; no history was reconstructed.
 
-## Evidence requirements and remaining gates
-
-1. Obtain explicit approval before any AWS deployment, infrastructure change, or live test.
-2. Check authorized credentials/resources, deploy updated code through the correctly configured starter environment, and verify READY plus the hosted code version. Do not claim success from old deployment metadata.
-3. Capture the real `uv run agentcore invoke` command and order response into `evidence/09_cloud_invoke_attempt2.txt`.
-4. Invoke memory session A, wait at least 30 seconds for extraction, then invoke distinct session B for the same customer. Capture genuine outputs into `10_memory_session_A.txt` and `11_memory_session_B.txt`; investigate failures and retain them honestly.
-5. If the lab has expired, report that blocker and retain the original successful cloud screenshot. Do not create empty or imaginary passing evidence.
-6. After genuine live evidence is validated, rebuild the ZIP and prepare the merge into main. No force push, history rewrite, evidence deletion, or premature merge is required.
-
-The supplied reviewer feedback is the current remediation basis. A separate complete official rubric is still unavailable. The original copyright/license remains unchanged. The author has confirmed public redistribution permission and requested public visibility while retaining source configuration; this confirmation does not alter the written license or constitute an independent legal verification.
+The above mappings cover all seven criteria identified in supplied review history and all six official project scenarios. They cannot certify unseen additional rubric requirements. Original source architecture, dependencies, attribution/license and accepted evidence are preserved. [Submission checklist](SUBMISSION_CHECKLIST.md) · [Validation/security](VALIDATION.md) · [Evidence index](../evidence/README.md).

@@ -1,0 +1,87 @@
+{
+  "01_order_tracking.png": {
+    "sha256": "c1a5a50612f633c708dc767eddcc346de24a808a4ad16e30d87ddd3e74008e76",
+    "bytes": 148403,
+    "original_git_blob": "f433ee61155db75ee24f3100aaf423407c0cda80"
+  },
+  "02_refund_processing.png": {
+    "sha256": "ce6f0fa70070d4df21b5a18a5b91311d6ff68af01a597ca8f7371f3e7df19e1e",
+    "bytes": 185661,
+    "original_git_blob": "8fbc1a2a873244edf1f932f225e4eaeb2f46a7d7"
+  },
+  "03_rag.png": {
+    "sha256": "014d472ef534286106502262f7c9baebbeec5edbab6e67d884d914f0cc75d7f5",
+    "bytes": 213912,
+    "original_git_blob": "d454b297a1472c5235df3db0f20ab206de20a19d"
+  },
+  "04_cross_session_memory.png": {
+    "sha256": "b07b9914766bb81156ad0f7ad4fb7426d72c9f421b9710c5e7feab48309a9898",
+    "bytes": 668685,
+    "original_git_blob": "546938b2da35ac72344391082932625d602bd7bf"
+  },
+  "05_loyalty_discount.png": {
+    "sha256": "33f91ab53c8155250343217662a0b0e2eb395fb3f7411b5c6201669754a38251",
+    "bytes": 216377,
+    "original_git_blob": "314807bb32c9e5211a5c858b6db0abd1e0e11ecb"
+  },
+  "06_agentcore_browser.png": {
+    "sha256": "de224469d3b9608cc8f60ad6a8fc6871cc0023419c2967f63010dec9a7c30b07",
+    "bytes": 697011,
+    "original_git_blob": "50deb7ca80e741229016a1ffe9ddfbbcea66a87b"
+  },
+  "07_deployment_success.png": {
+    "sha256": "dee6c2bb44006fa2129c81db9c36f89e02a33d99acfb42eeca8a5190cfc8c7dc",
+    "bytes": 1108572,
+    "original_git_blob": "80a66b9c70100b91f620bb3a5e24d6bf4b0cb314"
+  },
+  "08_cloud_invocation.png": {
+    "sha256": "d82a30a5af0d7d494e4a538630284bc83de1817716d117d866415c6a92a53e0f",
+    "bytes": 296203,
+    "original_git_blob": "3d0c3f24d577a28666e0c04680f1edda50fb2b9f"
+  },
+  "09_hosted_order.png": {
+    "sha256": "f9a0db55003c043c067cf6f4b36ad3deafa391f8f0708123b912c0c1f1c92176",
+    "bytes": 269102,
+    "original_git_blob": "ec594fc7184979a489e86c263d0e9760660d6546"
+  },
+  "10_memory_A.png": {
+    "sha256": "7978bd8f5b2fcae25e525348ff7e94ee03a05df1efeba9eee30fdb66f02d0494",
+    "bytes": 190904,
+    "original_git_blob": "dcd6be3fea4ccc34d56d69620685ae10d8dc1929"
+  },
+  "11_memory_B.png": {
+    "sha256": "e27a01ea840fbd777f4f1b2f0b95fb83dc17e9f16c27beae641af83022855328",
+    "bytes": 211103,
+    "original_git_blob": "5b08e7f21c5af3ed600a4c3dfc16234b4c88c8e5"
+  },
+  "13_loyalty.png": {
+    "sha256": "54755ae4941d8dad1316896a1bbb618b6d771246175124273186e5eb414731c6",
+    "bytes": 263554,
+    "original_git_blob": "0e2022c47866e60ee3c352a53494746049b21419"
+  },
+  "14_runtime_details.png": {
+    "sha256": "4092a1a9d15912904245eca24d2b8d389dfa83583a4842a5630fec1e920813ff",
+    "bytes": 140345,
+    "original_git_blob": "46da97a658a67feda2b6bd4f2a7c8ac48cbb5649"
+  },
+  "09_cloud_invoke_attempt2.txt": {
+    "sha256": "f0d9ac7b6c3842a89e83cb583a99ceb8a4ca32636f0c285bfe8f9ed5f423f995",
+    "bytes": 3238,
+    "classification": "Historical October 28 response-only transcript; superseded for current scenario by October 29 screenshots"
+  },
+  "10_memory_session_A.txt": {
+    "sha256": "948dbcbae72482ca9b459af0807cbff44302feb4a6171b439c20875c618c74df",
+    "bytes": 3499,
+    "classification": "Historical October 28 response-only transcript; superseded for current scenario by October 29 screenshots"
+  },
+  "11_memory_session_B_distinct_runtime.txt": {
+    "sha256": "a20a231964889e3da5ab58a1f032877239f48efff771dd0ca6f845038f9cd3ee",
+    "bytes": 5677,
+    "classification": "Historical October 28 response-only transcript; superseded for current scenario by October 29 screenshots"
+  },
+  "13_loyalty_attempt2.txt": {
+    "sha256": "2c0c79faef9930aadb5c6e121dc3dec5625d8d2f4ae05189600b9236448d2e25",
+    "bytes": 3350,
+    "classification": "Historical October 28 response-only transcript; superseded for current scenario by October 29 screenshots"
+  }
+}

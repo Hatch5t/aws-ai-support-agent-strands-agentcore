@@ -1,0 +1,70 @@
+{
+  "evidence_branch_commit": "c93aae6aedbcc580bbd60433e5577cf1263cd403",
+  "source_parent": "d3ee0cdb510af5a10e695889dbb7386ce5a4f665",
+  "files": [
+    {
+      "path": "evidence/09_cloud_invoke_attempt2.txt",
+      "bytes": 3238,
+      "sha256": "f0d9ac7b6c3842a89e83cb583a99ceb8a4ca32636f0c285bfe8f9ed5f423f995",
+      "runtime_session_ids": [
+        "d1036c8f-cbbb-488d-b151-1845ac447037"
+      ],
+      "request_ids": [
+        "55363dca-2aaf-43a9-a87f-ef14cf07694a"
+      ],
+      "invoke_command_present": false,
+      "payload_application_session_ids": [],
+      "payload_customer_ids": [],
+      "tier_discount_pct_field_present": false,
+      "byte_identical_to_evidence_branch": true
+    },
+    {
+      "path": "evidence/10_memory_session_A.txt",
+      "bytes": 3499,
+      "sha256": "948dbcbae72482ca9b459af0807cbff44302feb4a6171b439c20875c618c74df",
+      "runtime_session_ids": [
+        "d1036c8f-cbbb-488d-b151-1845ac447037"
+      ],
+      "request_ids": [
+        "78d477f1-d09d-4523-acac-9cab478ca6a0"
+      ],
+      "invoke_command_present": false,
+      "payload_application_session_ids": [],
+      "payload_customer_ids": [],
+      "tier_discount_pct_field_present": false,
+      "byte_identical_to_evidence_branch": true
+    },
+    {
+      "path": "evidence/11_memory_session_B_distinct_runtime.txt",
+      "bytes": 5677,
+      "sha256": "a20a231964889e3da5ab58a1f032877239f48efff771dd0ca6f845038f9cd3ee",
+      "runtime_session_ids": [
+        "302A43C4-CB8D-4744-9ABA-F36B2725A9CA"
+      ],
+      "request_ids": [
+        "9113828f-be13-439f-b235-afb06181ab3a"
+      ],
+      "invoke_command_present": false,
+      "payload_application_session_ids": [],
+      "payload_customer_ids": [],
+      "tier_discount_pct_field_present": false,
+      "byte_identical_to_evidence_branch": true
+    },
+    {
+      "path": "evidence/13_loyalty_attempt2.txt",
+      "bytes": 3350,
+      "sha256": "2c0c79faef9930aadb5c6e121dc3dec5625d8d2f4ae05189600b9236448d2e25",
+      "runtime_session_ids": [
+        "d1036c8f-cbbb-488d-b151-1845ac447037"
+      ],
+      "request_ids": [
+        "ee2147a7-0b63-4026-8a84-5a0ca76ab7c4"
+      ],
+      "invoke_command_present": false,
+      "payload_application_session_ids": [],
+      "payload_customer_ids": [],
+      "tier_discount_pct_field_present": false,
+      "byte_identical_to_evidence_branch": true
+    }
+  ]
+}

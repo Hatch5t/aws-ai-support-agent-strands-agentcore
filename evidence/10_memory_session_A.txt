@@ -1,0 +1,29 @@
+
+⚠️ Recommendation: The Starter Toolkit CLI is no longer supported.
+   Please use the AgentCore CLI (@aws/agentcore) to create, develop, and deploy agents on Amazon Bedrock AgentCore.
+   New Bedrock AgentCore features are only accessible in the AgentCore CLI.
+
+   To uninstall this starter toolkit, run: pip uninstall bedrock-agentcore-starter-toolkit
+   To install the AgentCore CLI: npm install -g @aws/agentcore
+   To import existing agents, run: agentcore import
+   Set AGENTCORE_SUPPRESS_RECOMMENDATION=1 to silence this warning.
+
+╭───────────────────────────────────────────────────────────────────────────────────────────── CustomerSupportAgent ─────────────────────────────────────────────────────────────────────────────────────────────╮
+│ Session: d1036c8f-cbbb-488d-b151-1845ac447037                                                                                                                                                                  │
+│ Request ID: 78d477f1-d09d-4523-acac-9cab478ca6a0                                                                                                                                                               │
+│ ARN: arn:aws:bedrock-agentcore:us-east-1:105833965496:runtime/CustomerSupportAgent-ZAsTqfF9MV                                                                                                                  │
+│ Logs: aws logs tail /aws/bedrock-agentcore/runtimes/CustomerSupportAgent-ZAsTqfF9MV-DEFAULT --log-stream-name-prefix "2026/10/28/[runtime-logs" --follow                                                       │
+│       aws logs tail /aws/bedrock-agentcore/runtimes/CustomerSupportAgent-ZAsTqfF9MV-DEFAULT --log-stream-name-prefix "2026/10/28/[runtime-logs" --since 1h                                                     │
+│ GenAI Dashboard: https://console.aws.amazon.com/cloudwatch/home?region=us-east-1#gen-ai-observability/agent-core                                                                                               │
+╰────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╯
+
+Response:
+Hello Jane! I'll keep my responses concise with bullet points as you prefer.
+
+**Your Current Status:**
+- **Order ORD-001:** Wireless Headphones Pro ($89.99) - **SHIPPED** via UPS
+  - Tracking: TRK987654321
+  - Estimated delivery: October 20, 2026
+- **Previous Refund:** Kindle Paperwhite from ORD-002 - $139.99 refunded (Refund ID: REF-ZALLYH4W, approved 2026-10-18)
+
+Let me know if you need anything specific about your electronics order!

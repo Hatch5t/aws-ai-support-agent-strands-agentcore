@@ -62,4 +62,8 @@ KB passages, memories, webpages, and model tool arguments are untrusted inputs. 
 
 ## Attempt 2 remediation boundary
 
-Gateway connection and discovery now run inside a scoped lifecycle helper with timeout/connection/unexpected-error handling, empty-tool rejection, a safe availability message and diagnostic logs. The transport, tool targets, model, RAG, Browser and MemoryHook remain unchanged. The loyalty tool's JSON contract adds tier_discount_pct and exposes the eight business fields from the existing result event. Neither change is evidence of a new cloud deployment; live verification awaits explicit approval.
+Corrected source `d3ee0cd` adds scoped Gateway lifecycle handling, discovery/exception logging, empty-tool rejection and safe user responses. It preserves the transport, targets, model, RAG, MemoryHook and Browser registration. The loyalty contract adds fractional `tier_discount_pct` and exposes all eight business fields from the result event, with explicit consistent fallback.
+
+Finalization integrates genuine screenshots showing READY Runtime version 2, hosted order success, fresh Memory A/B with both session layers distinct and complete displayed loyalty JSON. No functional source or AWS infrastructure was changed. [Evidence index](../evidence/README.md) · [Identifier/provenance inspection](ATTEMPT2_VERIFICATION_REPORT.md).
+
+The hosted JSON is not a raw Code Interpreter trace. Runtime metadata and a local source hash do not establish deployed-package byte identity; anonymous artifact access returned HTTP 403. These disclosed limits do not change the verified architecture or source behavior.

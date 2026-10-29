@@ -1,0 +1,29 @@
+
+⚠️ Recommendation: The Starter Toolkit CLI is no longer supported.
+   Please use the AgentCore CLI (@aws/agentcore) to create, develop, and deploy agents on Amazon Bedrock AgentCore.
+   New Bedrock AgentCore features are only accessible in the AgentCore CLI.
+
+   To uninstall this starter toolkit, run: pip uninstall bedrock-agentcore-starter-toolkit
+   To install the AgentCore CLI: npm install -g @aws/agentcore
+   To import existing agents, run: agentcore import
+   Set AGENTCORE_SUPPRESS_RECOMMENDATION=1 to silence this warning.
+
+╭───────────────────────────────────────────────────────────────────────────────────────────── CustomerSupportAgent ─────────────────────────────────────────────────────────────────────────────────────────────╮
+│ Session: d1036c8f-cbbb-488d-b151-1845ac447037                                                                                                                                                                  │
+│ Request ID: ee2147a7-0b63-4026-8a84-5a0ca76ab7c4                                                                                                                                                               │
+│ ARN: arn:aws:bedrock-agentcore:us-east-1:105833965496:runtime/CustomerSupportAgent-ZAsTqfF9MV                                                                                                                  │
+│ Logs: aws logs tail /aws/bedrock-agentcore/runtimes/CustomerSupportAgent-ZAsTqfF9MV-DEFAULT --log-stream-name-prefix "2026/10/28/[runtime-logs" --follow                                                       │
+│       aws logs tail /aws/bedrock-agentcore/runtimes/CustomerSupportAgent-ZAsTqfF9MV-DEFAULT --log-stream-name-prefix "2026/10/28/[runtime-logs" --since 1h                                                     │
+│ GenAI Dashboard: https://console.aws.amazon.com/cloudwatch/home?region=us-east-1#gen-ai-observability/agent-core                                                                                               │
+╰────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╯
+
+Response:
+**Loyalty discount breakdown for Jane (Gold tier):**
+
+- **Points redeemed:** 4,000 points  
+- **Points discount:** $40.00  
+- **Gold tier discount:** 10% ($15.00)  
+- **Final total:** $99.00  
+- **Total savings:** $51.00  
+- **Points earned:** 99 points  
+- **Remaining points:** 349 points

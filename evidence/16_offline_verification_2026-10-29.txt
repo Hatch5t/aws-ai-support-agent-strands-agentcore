@@ -1,0 +1,60 @@
+OFFLINE VERIFICATION — 2026-10-29
+Python 3.12.14
+Application source: corrected commit d3ee0cdb510af5a10e695889dbb7386ce5a4f665; byte-identical at screenshot commit b6cad1f.
+Command: python3 -m unittest discover -s tests -v
+External AWS/Strands dependencies are stubbed; no AWS endpoint/test was invoked.
+
+test_agent_failure_is_not_misreported_as_gateway_failure (test_remediation.GatewayTests.test_agent_failure_is_not_misreported_as_gateway_failure) ... ok
+test_cleanup_failure_returns_safe_gateway_error (test_remediation.GatewayTests.test_cleanup_failure_returns_safe_gateway_error) ... ok
+test_client_construction_failure (test_remediation.GatewayTests.test_client_construction_failure) ... ok
+test_connection_failure_discovering_tools (test_remediation.GatewayTests.test_connection_failure_discovering_tools) ... ok
+test_connection_failure_entering_context (test_remediation.GatewayTests.test_connection_failure_entering_context) ... ok
+test_empty_discovery_is_not_success (test_remediation.GatewayTests.test_empty_discovery_is_not_success) ... ok
+test_success_preserves_tools_transport_and_response (test_remediation.GatewayTests.test_success_preserves_tools_transport_and_response) ... ok
+test_timeout_discovering_tools (test_remediation.GatewayTests.test_timeout_discovering_tools) ... ok
+test_timeout_entering_context (test_remediation.GatewayTests.test_timeout_entering_context) ... ok
+test_unexpected_context_entry_failure (test_remediation.GatewayTests.test_unexpected_context_entry_failure) ... ok
+test_unexpected_discovery_failure (test_remediation.GatewayTests.test_unexpected_discovery_failure) ... ok
+test_code_interpreter_unavailable_has_consistent_fallback (test_remediation.LoyaltyTests.test_code_interpreter_unavailable_has_consistent_fallback) ... ok
+test_device_earning_rate (test_remediation.LoyaltyTests.test_device_earning_rate) ... ok
+test_error_result_is_not_success (test_remediation.LoyaltyTests.test_error_result_is_not_success) ... ok
+test_exact_gold_regression_all_values (test_remediation.LoyaltyTests.test_exact_gold_regression_all_values) ... ok
+test_fresh_earning_rate (test_remediation.LoyaltyTests.test_fresh_earning_rate) ... ok
+test_insufficient_points (test_remediation.LoyaltyTests.test_insufficient_points) ... ok
+test_invoke_failure_has_consistent_fallback (test_remediation.LoyaltyTests.test_invoke_failure_has_consistent_fallback) ... ok
+test_missing_required_field_is_not_success (test_remediation.LoyaltyTests.test_missing_required_field_is_not_success) ... ok
+test_no_result_event_is_not_success (test_remediation.LoyaltyTests.test_no_result_event_is_not_success) ... ok
+test_nonzero_exit_code_is_not_success (test_remediation.LoyaltyTests.test_nonzero_exit_code_is_not_success) ... ok
+test_platinum (test_remediation.LoyaltyTests.test_platinum) ... ok
+test_redemption_cap (test_remediation.LoyaltyTests.test_redemption_cap) ... ok
+test_redemption_rounds_down_to_500 (test_remediation.LoyaltyTests.test_redemption_rounds_down_to_500) ... ok
+test_session_entry_failure_has_consistent_fallback (test_remediation.LoyaltyTests.test_session_entry_failure_has_consistent_fallback) ... ok
+test_silver (test_remediation.LoyaltyTests.test_silver) ... ok
+test_small_order_does_not_exceed_cap (test_remediation.LoyaltyTests.test_small_order_does_not_exceed_cap) ... ok
+test_structured_stdout_only_result_is_parsed (test_remediation.LoyaltyTests.test_structured_stdout_only_result_is_parsed) ... ok
+test_text_content_only_result_is_parsed (test_remediation.LoyaltyTests.test_text_content_only_result_is_parsed) ... ok
+test_unknown_category_uses_standard_rate (test_remediation.LoyaltyTests.test_unknown_category_uses_standard_rate) ... ok
+test_unknown_tier_has_zero_tier_discount (test_remediation.LoyaltyTests.test_unknown_tier_has_zero_tier_discount) ... ok
+test_zero_points (test_remediation.LoyaltyTests.test_zero_points) ... ok
+test_rag_missing_id_guard_is_preserved (test_remediation.PassingFeatureRegressions.test_rag_missing_id_guard_is_preserved) ... ok
+test_rag_no_results_message_is_preserved (test_remediation.PassingFeatureRegressions.test_rag_no_results_message_is_preserved) ... ok
+test_rag_still_calls_retrieve_and_joins_passages (test_remediation.PassingFeatureRegressions.test_rag_still_calls_retrieve_and_joins_passages) ... ok
+
+----------------------------------------------------------------------
+Ran 35 tests in 0.159s
+
+OK
+
+Actual calculator JSON via locally executed generated Python and mocked Code Interpreter:
+{
+  "points_redeemed": 4000,
+  "points_discount": 40.0,
+  "tier_discount_pct": 0.1,
+  "tier_discount": 11.0,
+  "final_total": 99.0,
+  "total_savings": 51.0,
+  "points_earned": 99,
+  "remaining_points": 349
+}
+
+This is direct OFFLINE tool output, not a raw hosted Code Interpreter execution result.

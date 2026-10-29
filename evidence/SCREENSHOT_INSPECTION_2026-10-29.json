@@ -1,0 +1,80 @@
+{
+  "inspection_date": "2026-10-29",
+  "kind": "Human/visual transcription and inspection metadata; not raw AWS output",
+  "screenshot_branch": "attempt2-screenshots-20261029",
+  "screenshot_commit": "b6cad1ff3062a539e974ea49549dd14125c7f2be",
+  "runtime_arn": "arn:aws:bedrock-agentcore:us-east-1:105833965496:runtime/CustomerSupportAgent-ZAsTqfF9MV",
+  "order": {
+    "image": "09_hosted_order.png",
+    "command_visible": true,
+    "customer_id": "CUST-123",
+    "application_session_id": "attempt2-order-final",
+    "runtime_session_id": "302A43C4-CB8D-4744-9ABA-F36B2725A9CA",
+    "order_id": "ORD-001",
+    "status": "SHIPPED",
+    "carrier": "UPS",
+    "tracking_number": "TRK987654321",
+    "estimated_delivery": "October 31, 2026"
+  },
+  "memory_A": {
+    "image": "10_memory_A.png",
+    "literal_invoke_command_visible": false,
+    "payload_visible": true,
+    "customer_id": "CUST-MEM-20261029-61D1976B",
+    "application_session_id": "attempt2-fresh-memory-A",
+    "runtime_session_id": "56CECE82-C455-409B-B50E-B19047A5D6B5",
+    "request_id": "744f7eae-1168-4b0f-bf69-a548628beaff",
+    "facts": [
+      "Jane",
+      "short bullet-point answers",
+      "board games"
+    ],
+    "outcome": "Agent acknowledges facts"
+  },
+  "memory_B": {
+    "image": "11_memory_B.png",
+    "literal_invoke_command_visible": false,
+    "payload_visible": true,
+    "customer_id": "CUST-MEM-20261029-61D1976B",
+    "application_session_id": "attempt2-fresh-memory-B",
+    "runtime_session_id": "23A09AAB-BA5F-4FCA-A6FC-572D662FFB46",
+    "request_id": "04e3a820-13af-4a6d-902b-9f1b33728c84",
+    "request_repeats_saved_facts": false,
+    "recalled_facts": [
+      "Jane",
+      "short bullet-point answers",
+      "board games"
+    ]
+  },
+  "loyalty": {
+    "image": "13_loyalty.png",
+    "command_visible": true,
+    "application_session_id": "attempt2-loyalty-final",
+    "runtime_session_id": "3A82F4BA-2705-418D-995F-0A95C64575C2",
+    "displayed_response": {
+      "points_redeemed": 4000,
+      "points_discount": 40.0,
+      "tier_discount_pct": 0.1,
+      "tier_discount": 11.0,
+      "final_total": 99.0,
+      "total_savings": 51.0,
+      "points_earned": 99,
+      "remaining_points": 349
+    },
+    "scope": "Hosted agent JSON response; raw Code Interpreter execution event not captured"
+  },
+  "runtime": {
+    "image": "14_runtime_details.png",
+    "name": "CustomerSupportAgent",
+    "status": "READY",
+    "version": "2",
+    "updated": "2026-10-28T17:48:28.869077+00:00",
+    "source": {
+      "bucket": "bedrock-agentcore-codebuild-sources-105833965496-us-east-1",
+      "prefix": "CustomerSupportAgent/deployment.zip"
+    },
+    "displayed_local_main_sha256": "28887402ef78f0eddd84d40605390c52fc84479632e5bb169cc4c10a205d9deb",
+    "artifact_anonymous_HEAD_HTTP": 403,
+    "deployed_source_match_verified": false
+  }
+}

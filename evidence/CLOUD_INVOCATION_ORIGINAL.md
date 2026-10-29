@@ -23,12 +23,6 @@ Estimated Delivery: October 20, 2026
 
 The response is followed by the terminal prompt, with no invocation error visible. This supports the original hosted execution, not the current service state or deployment of the remediation branch. The unchanged [deployment screenshot](07_deployment_success.png) is separate evidence and retains its trace-delivery warning.
 
-## Attempt 2 live evidence status
+## Current Attempt 2 evidence
 
-Fresh deployment and live tests require the author's explicit approval. The files below will be created only from genuine executions:
-
-- `09_cloud_invoke_attempt2.txt`: exact hosted invocation command and real response after deployment of updated code.
-- `10_memory_session_A.txt`: genuine first-session `agentcore invoke` output.
-- `11_memory_session_B.txt`: genuine later-session recall output using the same actor and a different session ID.
-
-These three files are not present yet and are not represented as successful tests. Existing local memory screenshot 04 remains supplementary; it is not substituted for the reviewer-requested hosted two-session invocation evidence.
+This is historical original cloud evidence. Current reviewer-facing [order screenshot 09](09_hosted_order.png), [fresh Memory A](10_memory_A.png), [B](11_memory_B.png), [loyalty JSON 13](13_loyalty.png) and [READY/version metadata 14](14_runtime_details.png) supersede weaker earlier captures where applicable. All originals and four October 28 response-only logs remain unchanged. See the [evidence index](README.md) and [independent inspection](../docs/ATTEMPT2_VERIFICATION_REPORT.md) for exact scope and limits. No successful AWS test was repeated during finalization.

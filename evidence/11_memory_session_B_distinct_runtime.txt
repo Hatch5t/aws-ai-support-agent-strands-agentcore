@@ -1,0 +1,22 @@
+
+⚠️ Recommendation: The Starter Toolkit CLI is no longer supported.
+   Please use the AgentCore CLI (@aws/agentcore) to create, develop, and deploy agents on Amazon Bedrock AgentCore.
+   New Bedrock AgentCore features are only accessible in the AgentCore CLI.
+
+   To uninstall this starter toolkit, run: pip uninstall bedrock-agentcore-starter-toolkit
+   To install the AgentCore CLI: npm install -g @aws/agentcore
+   To import existing agents, run: agentcore import
+   Set AGENTCORE_SUPPRESS_RECOMMENDATION=1 to silence this warning.
+
+╭─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────── CustomerSupportAgent ────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╮
+│ Session: 302A43C4-CB8D-4744-9ABA-F36B2725A9CA                                                                                                                                                                                                                                                                                                                                                                                       │
+│ Request ID: 9113828f-be13-439f-b235-afb06181ab3a                                                                                                                                                                                                                                                                                                                                                                                    │
+│ ARN: arn:aws:bedrock-agentcore:us-east-1:105833965496:runtime/CustomerSupportAgent-ZAsTqfF9MV                                                                                                                                                                                                                                                                                                                                       │
+│ Logs: aws logs tail /aws/bedrock-agentcore/runtimes/CustomerSupportAgent-ZAsTqfF9MV-DEFAULT --log-stream-name-prefix "2026/10/28/[runtime-logs" --follow                                                                                                                                                                                                                                                                            │
+│       aws logs tail /aws/bedrock-agentcore/runtimes/CustomerSupportAgent-ZAsTqfF9MV-DEFAULT --log-stream-name-prefix "2026/10/28/[runtime-logs" --since 1h                                                                                                                                                                                                                                                                          │
+│ GenAI Dashboard: https://console.aws.amazon.com/cloudwatch/home?region=us-east-1#gen-ai-observability/agent-core                                                                                                                                                                                                                                                                                                                    │
+╰─────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────────╯
+
+Response:
+- Your name is Jane.
+- You prefer short bullet-point answers.
